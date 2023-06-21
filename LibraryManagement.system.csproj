@@ -106,6 +106,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\css\AddBook.css" />
+    <Content Include="App_Data\css\ManageTransactions.css" />
+    <Content Include="App_Data\css\ManagePatrons.css" />
+    <Content Include="App_Data\css\ReturnBook.css" />
+    <Content Include="App_Data\css\BorrowBook.css" />
+    <Content Include="App_Data\css\AddPatron.css" />
     <Content Include="Models\AddPatron.aspx" />
     <Content Include="Models\ReturnBook.aspx" />
     <Content Include="Models\BorrowBook.aspx" />
@@ -151,9 +157,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
