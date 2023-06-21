@@ -27,9 +27,9 @@
         </div>
         <hr class="vertical-line"/>
         <!--NAVBAR END-->
-        <div class="content">
-            <form id="form2" runat="server">
-                <div class="content">
+        <div class="container">            
+            <div class="content">
+                <form id="form" runat="server">
                     <h2>Borrow Book</h2>
                     <hr />
                     <div class="row">
@@ -51,8 +51,8 @@
                             <asp:Label ID="SuccessMessageLabel" runat="server" Text="" CssClass="text-success mt-3"></asp:Label>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>            
         </div>
     </div>   
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

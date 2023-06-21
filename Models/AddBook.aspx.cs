@@ -15,6 +15,8 @@ namespace LibraryManagement.system.Models
             string bookCatDetail = txtBookCatDetail.Text;
             string bookTitle = txtBookTitle.Text;
             int copyNum = int.Parse(txtCopyNum.Text);
+            string status = "IN";
+            int numberOfDaysAllowed = string.IsNullOrEmpty(txtNumberOfDaysAllowed.Text) ? 3 : int.Parse(txtNumberOfDaysAllowed.Text);
 
             try
             {
@@ -36,13 +38,15 @@ namespace LibraryManagement.system.Models
                     }
 
                     // Insert the book into the database
-                    string insertQuery = "INSERT INTO bookinfo (bookcategory, bookcatdetail, booktitle, copynum) " +
-                                         "VALUES (@bookcategory, @bookcatdetail, @booktitle, @copynum)";
+                    string insertQuery = "INSERT INTO bookinfo (bookcategory, bookcatdetail, booktitle, copynum, status, numberofdaysallowed) " +
+                                         "VALUES (@bookcategory, @bookcatdetail, @booktitle, @copynum, @status, @numberofdaysallowed)";
                     MySqlCommand insertCommand = new MySqlCommand(insertQuery, connection);
                     insertCommand.Parameters.AddWithValue("@bookcategory", bookCategory);
                     insertCommand.Parameters.AddWithValue("@bookcatdetail", bookCatDetail);
                     insertCommand.Parameters.AddWithValue("@booktitle", bookTitle);
                     insertCommand.Parameters.AddWithValue("@copynum", copyNum);
+                    insertCommand.Parameters.AddWithValue("@status", status);
+                    insertCommand.Parameters.AddWithValue("@numberofdaysallowed", numberOfDaysAllowed);
                     insertCommand.ExecuteNonQuery();
 
                     // Display success message

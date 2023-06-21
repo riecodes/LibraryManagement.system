@@ -26,7 +26,7 @@
         <hr class="vertical-line"/>
         <!--NAVBAR END-->
         <div class="content">
-            <form id="form1" runat="server">  
+            <form id="form" runat="server">  
                 <div>
                     <h1>Add Patron</h1>
                     <asp:Label ID="ErrorMessageLabel" runat="server" ForeColor="Red" Visible="false"></asp:Label>

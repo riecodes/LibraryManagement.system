@@ -25,50 +25,36 @@
         </div>
         <hr class="vertical-line" />
         <!--NAVBAR END-->
-        <div class="content">
-            <form id="form1" runat="server">
-                <asp:TextBox ID="txtBookCategory" runat="server"></asp:TextBox>
-                <asp:TextBox ID="txtBookCatDetail" runat="server"></asp:TextBox>
-                <asp:TextBox ID="txtBookTitle" runat="server"></asp:TextBox>
-                <asp:TextBox ID="txtCopyNum" runat="server"></asp:TextBox>
-                <asp:Button ID="Button1" runat="server" Text="Add Book" OnClick="btnAddBook_Click" />
-                <asp:Label ID="lblMessage" runat="server" Text=""></asp:Label>
-
-                <div class="input-group">
-                    <label for="bookTitle">Book Title:</label>
-                    <input type="text" id="bookTitle" name="bookTitle" runat="server" />
-                </div>
-                <div class="input-group">
-                    <label for="bookCategory">Book Category:</label>
-                    <input type="text" id="bookCategory" name="bookCategory" runat="server" />
-                </div>
-                <div class="input-group">
-                    <label for="bookAuthor">Book Author:</label>
-                    <input type="text" id="bookAuthor" name="bookAuthor" runat="server" />
-                </div>
-                <div class="input-group">
-                    <label for="bookISBN">Book ISBN:</label>
-                    <input type="text" id="bookISBN" name="bookISBN" runat="server" />
-                </div>
-                <div class="input-group">
-                    <label for="copyNum">Copy Number:</label>
-                    <input type="text" id="copyNum" name="copyNum" runat="server" />
-                </div>
-                <div class="input-group">
-                    <label for="status">Status:</label>
-                    <select id="status" name="status" runat="server">
-                        <option value="IN">IN</option>
-                        <option value="OUT">OUT</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="numberOfDaysAllowed">Number of Days Allowed:</label>
-                    <input type="text" id="numberOfDaysAllowed" name="numberOfDaysAllowed" runat="server" />
-                </div>
-                <div class="input-group">
-                    <input type="submit" id="btnAddBook" value="Add Book" runat="server" />
-                </div>
-            </form>
+        <div class="container">           
+            <div class="content">
+                <form id="form" runat="server">
+                    <h2>Add Book</h2>
+                    <asp:Label ID="lblMessage" runat="server" CssClass="message"></asp:Label>
+                    <div class="input-group">
+                        <label for="txtBookCategory">Book Category:</label>
+                        <asp:TextBox ID="txtBookCategory" runat="server"></asp:TextBox>
+                    </div>
+                    <div class="input-group">
+                        <label for="txtBookCatDetail">Book Category Detail:</label>
+                        <asp:TextBox ID="txtBookCatDetail" runat="server"></asp:TextBox>
+                    </div>
+                    <div class="input-group">
+                        <label for="txtBookTitle">Book Title:</label>
+                        <asp:TextBox ID="txtBookTitle" runat="server"></asp:TextBox>
+                    </div>
+                    <div class="input-group">
+                        <label for="txtCopyNum">Copy Number:</label>
+                        <asp:TextBox ID="txtCopyNum" runat="server" TextMode="Number"></asp:TextBox>
+                    </div>
+                    <div class="input-group">
+                        <label for="txtNumberOfDaysAllowed">Number of Days Allowed:</label>
+                        <asp:TextBox ID="txtNumberOfDaysAllowed" runat="server" TextMode="Number" value="3"></asp:TextBox>
+                    </div>
+                    <div class="input-group">
+                        <asp:Button ID="btnAddBook" runat="server" Text="Add Book" OnClick="btnAddBook_Click" CssClass="btn" />
+                    </div>
+                </form>
+            </div>        
         </div>
     </div>       
 </body>
