@@ -6,6 +6,9 @@
 <head runat="server">
     <title>Return Book</title>
     <link rel="stylesheet" href="/App_Data/css/returnbook.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
     <form id="form1" runat="server">

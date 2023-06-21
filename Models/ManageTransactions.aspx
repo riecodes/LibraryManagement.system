@@ -6,6 +6,9 @@
 <head runat="server">
     <title>Manage Transactions</title>
     <link rel="stylesheet" href="/App_Data/css/managetransactions.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
     <form id="form4" runat="server">
