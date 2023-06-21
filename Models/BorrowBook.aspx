@@ -10,8 +10,18 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
 </head>
 <body>
+    <div class="navbar">
+            <ul>
+                <li><a href="Default.aspx">Home</a></li>
+                <li><a href="AddBook.aspx">Add Book</a></li>
+                <li><a href="BorrowBook.aspx">Borrow Book</a></li>
+                <li><a href="ReturnBook.aspx">Return Book</a></li>
+                <li><a href="ViewTransactions.aspx">View Transactions</a></li>
+            </ul>
+        </div>
     <form id="form2" runat="server">
         <div class="container mt-5">
+
             <h2>Borrow Book</h2>
             <hr />
 
