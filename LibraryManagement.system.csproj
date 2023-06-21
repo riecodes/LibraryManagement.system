@@ -106,12 +106,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\css\addbook.css" />
-    <Content Include="App_Data\css\default.css" />
-    <Content Include="App_Data\css\managepatrons.css" />
-    <Content Include="App_Data\css\returnbook.css" />
-    <Content Include="App_Data\css\borrowbook.css" />
-    <Content Include="App_Data\css\viewtransactions.css" />
+    <Content Include="Models\css\addbook.css" />
+    <Content Include="Models\css\default.css" />
+    <Content Include="Models\css\managepatrons.css" />
+    <Content Include="Models\css\returnbook.css" />
+    <Content Include="Models\css\borrowbook.css" />
+    <Content Include="Models\css\viewtransactions.css" />
     <Content Include="Models\AddBook.aspx" />
     <Content Include="Models\Default.aspx" />
     <Content Include="Models\ManagePatrons.aspx" />
@@ -189,7 +189,9 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
