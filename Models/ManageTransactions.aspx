@@ -11,18 +11,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
-    <form id="form4" runat="server">
+    <div class="container">
+        <!--NAVBAR START-->
         <div class="navbar">
             <ul>
-                <li><a href="Default.aspx">Home</a></li>
-                <li><a href="AddBook.aspx">Add Book</a></li>
-                <li><a href="BorrowBook.aspx">Borrow Book</a></li>
-                <li><a href="ReturnBook.aspx">Return Book</a></li>
-                <li><a href="ManagePatrons.aspx">Manage Patrons</a></li>
-                <li><a href="ManageTransactions.aspx">Manage Transactions</a></li>
-                <li><a href="ViewTransactions.aspx">View Transactions</a></li>
+                <li><a href="Default.aspx"><p>Home</p></a></li>
+                <li><a href="AddBook.aspx"><p>Add Book</p></a></li>
+                <li><a href="BorrowBook.aspx"><p>Borrow Book</p></a></li>
+                <li><a href="ReturnBook.aspx"><p>Return Book</p></a></li>
+                <li><a href="ManagePatrons.aspx"><p>Manage Patrons</p></a></li>
+                <li><a href="ManageTransactions.aspx"><p>Manage Transactions</p></a></li>
+                <li><a href="ViewTransactions.aspx"><p>View Transactions</p></a></li>
             </ul>
         </div>
-    </form>
+        <hr class="vertical-line"/>
+        <!--NAVBAR END-->
+        <div class="content">
+            <form id="form4" runat="server">
+        
+            </form>
+        </div>
+    </div>
 </body>
 </html>
