@@ -106,11 +106,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\css\AddBook.css" />
-    <Content Include="App_Data\css\ManageTransactions.css" />
-    <Content Include="App_Data\css\ManagePatrons.css" />
-    <Content Include="App_Data\css\ReturnBook.css" />
-    <Content Include="App_Data\css\BorrowBook.css" />
+    <Content Include="App_Data\css\addbook.css" />
+    <Content Include="App_Data\css\managetransactions.css" />
+    <Content Include="App_Data\css\managepatrons.css" />
+    <Content Include="App_Data\css\returnbook.css" />
+    <Content Include="App_Data\css\borrowbook.css" />
     <Content Include="Models\AddBook.aspx" />
     <Content Include="Models\Default.aspx" />
     <Content Include="Models\ManagePatrons.aspx" />
