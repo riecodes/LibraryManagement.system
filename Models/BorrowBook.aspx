@@ -16,9 +16,11 @@
                 <li><a href="AddBook.aspx">Add Book</a></li>
                 <li><a href="BorrowBook.aspx">Borrow Book</a></li>
                 <li><a href="ReturnBook.aspx">Return Book</a></li>
+                <li><a href="ManagePatrons.aspx">Manage Patrons</a></li>
+                <li><a href="ManageTransactions.aspx">Manage Transactions</a></li>
                 <li><a href="ViewTransactions.aspx">View Transactions</a></li>
             </ul>
-        </div>
+    </div>
     <form id="form2" runat="server">
         <div class="container mt-5">
 

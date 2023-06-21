@@ -111,19 +111,43 @@
     <Content Include="App_Data\css\ManagePatrons.css" />
     <Content Include="App_Data\css\ReturnBook.css" />
     <Content Include="App_Data\css\BorrowBook.css" />
-    <Content Include="App_Data\css\AddPatron.css" />
-    <Content Include="Models\AddPatron.aspx" />
+    <Content Include="Models\AddBook.aspx" />
+    <Content Include="Models\Default.aspx" />
+    <Content Include="Models\ManagePatrons.aspx" />
+    <Content Include="Models\ManageTransactions.aspx" />
     <Content Include="Models\ReturnBook.aspx" />
     <Content Include="Models\BorrowBook.aspx" />
+    <Content Include="Models\ViewTransactions.aspx" />
     <Content Include="Models\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\AddPatron.aspx.cs">
-      <DependentUpon>AddPatron.aspx</DependentUpon>
+    <Compile Include="Models\AddBook.aspx.cs">
+      <DependentUpon>AddBook.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Models\AddPatron.aspx.designer.cs">
-      <DependentUpon>AddPatron.aspx</DependentUpon>
+    <Compile Include="Models\AddBook.aspx.designer.cs">
+      <DependentUpon>AddBook.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Models\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ManagePatrons.aspx.cs">
+      <DependentUpon>ManagePatrons.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Models\ManagePatrons.aspx.designer.cs">
+      <DependentUpon>ManagePatrons.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ManageTransactions.aspx.cs">
+      <DependentUpon>ManageTransactions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Models\ManageTransactions.aspx.designer.cs">
+      <DependentUpon>ManageTransactions.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\ReturnBook.aspx.cs">
       <DependentUpon>ReturnBook.aspx</DependentUpon>
@@ -139,10 +163,17 @@
     <Compile Include="Models\BorrowBook.aspx.designer.cs">
       <DependentUpon>BorrowBook.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewTransactions.aspx.cs">
+      <DependentUpon>ViewTransactions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Models\ViewTransactions.aspx.designer.cs">
+      <DependentUpon>ViewTransactions.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Models\packages.config" />
+    <None Include="packages.config" />
     <None Include="Models\Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -8,7 +8,14 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>
+        <div class="navbar">
+            <ul>
+                <li><a href="Default.aspx">Home</a></li>
+                <li><a href="AddBook.aspx">Add Book</a></li>
+                <li><a href="BorrowBook.aspx">Borrow Book</a></li>
+                <li><a href="ReturnBook.aspx">Return Book</a></li>
+                <li><a href="ViewTransactions.aspx">View Transactions</a></li>
+            </ul>
         </div>
     </form>
 </body>

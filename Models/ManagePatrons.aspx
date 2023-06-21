@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AddPatron.aspx.cs" Inherits="LibraryManagement.system.AddPatron" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ManagePatrons.aspx.cs" Inherits="LibraryManagement.system.AddPatron" %>
 
 <!DOCTYPE html>
 
