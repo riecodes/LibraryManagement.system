@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Library Management System</title>
-    <link rel="stylesheet" href="borrowbook.css" />
+    <link rel="stylesheet" href="/App_Data/css/default.css"/>
 </head>
 <body>
     <form id="form" runat="server">

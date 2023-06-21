@@ -8,16 +8,15 @@
 </head>
 <body>
     <div class="navbar">
-        <div>
-            <ul>
-                <li><a href="Default.aspx">Home</a></li>
-                <li><a href="ManagePatron.aspx">Manage Patrons</a></li>
-                <li><a href="AddBook.aspx">Add Book</a></li>
-                <li><a href="BorrowBook.aspx">Borrow Book</a></li>
-                <li><a href="ReturnBook.aspx">Return Book</a></li>
-                <li><a href="ViewTransactions.aspx">View Transactions</a></li>
-            </ul>
-        </div>
+        <ul>
+            <li><a href="Default.aspx">Home</a></li>
+            <li><a href="AddBook.aspx">Add Book</a></li>
+            <li><a href="BorrowBook.aspx">Borrow Book</a></li>
+            <li><a href="ReturnBook.aspx">Return Book</a></li>
+            <li><a href="ManagePatrons.aspx">Manage Patrons</a></li>
+            <li><a href="ManageTransactions.aspx">Manage Transactions</a></li>
+            <li><a href="ViewTransactions.aspx">View Transactions</a></li>
+        </ul>
     </div>
     <form id="form1" runat="server">  
         <div>
