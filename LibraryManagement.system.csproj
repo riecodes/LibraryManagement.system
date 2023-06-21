@@ -111,14 +111,13 @@
     <Content Include="Models\css\managepatrons.css" />
     <Content Include="Models\css\returnbook.css" />
     <Content Include="Models\css\borrowbook.css" />
-    <Content Include="Models\css\viewtransactions.css" />
+    <Content Include="Models\css\managetransactions.css" />
     <Content Include="Models\AddBook.aspx" />
     <Content Include="Models\Default.aspx" />
     <Content Include="Models\ManagePatrons.aspx" />
     <Content Include="Models\ManageTransactions.aspx" />
     <Content Include="Models\ReturnBook.aspx" />
     <Content Include="Models\BorrowBook.aspx" />
-    <Content Include="Models\ViewTransactions.aspx" />
     <Content Include="Models\Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -163,13 +162,6 @@
     </Compile>
     <Compile Include="Models\BorrowBook.aspx.designer.cs">
       <DependentUpon>BorrowBook.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ViewTransactions.aspx.cs">
-      <DependentUpon>ViewTransactions.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Models\ViewTransactions.aspx.designer.cs">
-      <DependentUpon>ViewTransactions.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
