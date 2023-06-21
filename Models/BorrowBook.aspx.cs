@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using System.Web.UI.WebControls;
 
 namespace LibraryManagement.system
@@ -21,12 +21,12 @@ namespace LibraryManagement.system
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
             string query = "SELECT bookid FROM bookinfo WHERE status = 'IN'";
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     connection.Open();
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -48,9 +48,9 @@ namespace LibraryManagement.system
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
             string query = "INSERT INTO transactioninfo (borrowerid, bookid, borrowdate, returndate) VALUES (@borrowerid, @bookid, @borrowdate, @returndate)";
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@borrowerid", borrowerId);
                     command.Parameters.AddWithValue("@bookid", bookId);
@@ -77,9 +77,9 @@ namespace LibraryManagement.system
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
             string query = "SELECT numberofdaysallowed FROM bookinfo WHERE bookid = @bookid";
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@bookid", bookId);
 
@@ -101,9 +101,9 @@ namespace LibraryManagement.system
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
             string query = "UPDATE bookinfo SET status = @status WHERE bookid = @bookid";
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@status", status);
                     command.Parameters.AddWithValue("@bookid", bookId);

@@ -106,47 +106,46 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AddPatron.aspx" />
-    <Content Include="ReturnBook.aspx" />
-    <Content Include="BorrowBook.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Models\AddPatron.aspx" />
+    <Content Include="Models\ReturnBook.aspx" />
+    <Content Include="Models\BorrowBook.aspx" />
+    <Content Include="Models\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddPatron.aspx.cs">
+    <Compile Include="Models\AddPatron.aspx.cs">
       <DependentUpon>AddPatron.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AddPatron.aspx.designer.cs">
+    <Compile Include="Models\AddPatron.aspx.designer.cs">
       <DependentUpon>AddPatron.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ReturnBook.aspx.cs">
+    <Compile Include="Models\ReturnBook.aspx.cs">
       <DependentUpon>ReturnBook.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ReturnBook.aspx.designer.cs">
+    <Compile Include="Models\ReturnBook.aspx.designer.cs">
       <DependentUpon>ReturnBook.aspx</DependentUpon>
     </Compile>
-    <Compile Include="BorrowBook.aspx.cs">
+    <Compile Include="Models\BorrowBook.aspx.cs">
       <DependentUpon>BorrowBook.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="BorrowBook.aspx.designer.cs">
+    <Compile Include="Models\BorrowBook.aspx.designer.cs">
       <DependentUpon>BorrowBook.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="Web.Debug.config">
+    <None Include="Models\packages.config" />
+    <None Include="Models\Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <None Include="Web.Release.config">
+    <None Include="Models\Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
