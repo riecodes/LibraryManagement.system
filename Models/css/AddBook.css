@@ -26,19 +26,19 @@ body {
 
         .navbar ul li {
             transition: 0.3s;
-            padding: 20px 50px 20px 50px;
             margin-top: 10px;
         }
 
-            .navbar ul li:hover {
+            .navbar ul li p:hover {
                 border-radius: 7px;
                 background-color: grey;
                 transition: 0.3s;
                 cursor: pointer;
             }
 
-
             .navbar ul li p {
+                padding: 50px;
+                font-size: 20px;
             }
 
             .navbar ul li a {
