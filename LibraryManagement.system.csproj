@@ -109,7 +109,6 @@
     <Content Include="AddPatron.aspx" />
     <Content Include="ReturnBook.aspx" />
     <Content Include="BorrowBook.aspx" />
-    <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -133,9 +132,6 @@
     </Compile>
     <Compile Include="BorrowBook.aspx.designer.cs">
       <DependentUpon>BorrowBook.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
