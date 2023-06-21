@@ -22,8 +22,7 @@
                 <li><a href="BorrowBook.aspx"><p>Borrow Book</p></a></li>
                 <li><a href="ReturnBook.aspx"><p>Return Book</p></a></li>
                 <li><a href="ManagePatrons.aspx"><p>Manage Patrons</p></a></li>
-                <li><a href="ManageTransactions.aspx"><p>Manage Transactions</p></a></li>
-                <li><a href="ViewTransactions.aspx"><p>View Transactions</p></a></li>
+                <li><a href="ManageTransactions.aspx"><p>Manage Transactions</p></a></li>               
             </ul>
         </div>
         <hr class="vertical-line"/>
