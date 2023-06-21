@@ -108,7 +108,6 @@
   <ItemGroup>
     <Content Include="App_Data\css\addbook.css" />
     <Content Include="App_Data\css\default.css" />
-    <Content Include="App_Data\css\managetransactions.css" />
     <Content Include="App_Data\css\managepatrons.css" />
     <Content Include="App_Data\css\returnbook.css" />
     <Content Include="App_Data\css\borrowbook.css" />
