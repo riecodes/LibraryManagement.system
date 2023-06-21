@@ -111,6 +111,7 @@
     <Content Include="App_Data\css\managepatrons.css" />
     <Content Include="App_Data\css\returnbook.css" />
     <Content Include="App_Data\css\borrowbook.css" />
+    <Content Include="App_Data\css\viewtransactions.css" />
     <Content Include="Models\AddBook.aspx" />
     <Content Include="Models\Default.aspx" />
     <Content Include="Models\ManagePatrons.aspx" />
