@@ -29,7 +29,6 @@
             <div class="content">
                 <form id="form" runat="server">
                     <h2>Add Book</h2>
-                    <asp:Label ID="lblMessage" runat="server" CssClass="message"></asp:Label>
                     <div class="input-group">
                         <label for="txtBookCategory">Book Category:</label>
                         <asp:TextBox ID="txtBookCategory" runat="server"></asp:TextBox>
@@ -51,8 +50,9 @@
                         <asp:TextBox ID="txtNumberOfDaysAllowed" runat="server" TextMode="Number" value="3"></asp:TextBox>
                     </div>
                     <div class="input-group">
-                        <asp:Button ID="btnAddBook" runat="server" Text="Add Book" OnClick="btnAddBook_Click" CssClass="btn" />
+                        <asp:Button ID="btnAddBook" runat="server" Text="Add Book" OnClick="BtnAddBook_Click" CssClass="btn" />
                     </div>
+                    <asp:Label ID="lblMessage" runat="server" Text="" CssClass="Message"></asp:Label>
                 </form>
             </div>        
         </div>
