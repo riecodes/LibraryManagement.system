@@ -18,7 +18,7 @@ namespace LibraryManagement.system
 
         protected void LoadBookIds()
         {
-            string connectionString = "server=127.0.0.1;port=3306;user=root;password=4412@facebook;database=lib_management_schema;";
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
             string query = "SELECT bookid FROM bookinfo WHERE status = 'IN'";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
