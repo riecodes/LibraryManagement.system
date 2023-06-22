@@ -7,16 +7,20 @@ namespace LibraryManagement.system.Models
 {
     public partial class AddBook : System.Web.UI.Page
     {
-        protected void btnAddBook_Click(object sender, EventArgs e)
+        protected void BtnAddBook_Click(object sender, EventArgs e)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
 
             string bookCategory = txtBookCategory.Text;
             string bookCatDetail = txtBookCatDetail.Text;
             string bookTitle = txtBookTitle.Text;
-            int copyNum = int.Parse(txtCopyNum.Text);
+            int copyNum;
+            int.TryParse(txtCopyNum.Text, out copyNum);
             string status = "IN";
             int numberOfDaysAllowed = string.IsNullOrEmpty(txtNumberOfDaysAllowed.Text) ? 3 : int.Parse(txtNumberOfDaysAllowed.Text);
+
+            // Generate the book ID
+            string bookID = GenerateBookID(bookCategory, copyNum);
 
             try
             {
@@ -58,5 +62,14 @@ namespace LibraryManagement.system.Models
                 lblMessage.Text = "Error: " + ex.Message;
             }
         }
+        // Method to generate the book ID
+        private string GenerateBookID(string bookCategory, int copyNum)
+        {
+            string categoryCode = bookCategory.Length >= 2 ? bookCategory.Substring(0, 2).ToUpper() : bookCategory.ToUpper();
+            string copyNumFormatted = copyNum.ToString().PadLeft(3, '0');
+
+            return $"{categoryCode}-{copyNumFormatted}";
+        }
+
     }
 }
