@@ -1,127 +1,296 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Web;
-using System.Web.UI;
+using System.Data;
 using System.Web.UI.WebControls;
+using System.Web.UI.HtmlControls;
 
 namespace LibraryManagement.system
 {
-    public partial class AddPatron : System.Web.UI.Page
+    public partial class ManagePatrons : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            // Add necessary code if needed
         }
-        protected void SubmitButton_Click(object sender, EventArgs e)
+
+        protected void AddButton_Click(object sender, EventArgs e)
         {
-            // Validate user input
-            if (string.IsNullOrEmpty(BorrowerNameTextBox.Text))
-            {
-                // Display error message if borrower name is empty
-                ErrorMessageLabel.Text = "Please enter a borrower name.";
-                return;
-            }
+            string name = AddName.Value;
+            string course = AddCourse.Value;
+            string section = AddSection.Value;
+            int numberOfBooksAllowed = 3; // Default value
 
-            // Validate course
-            if (string.IsNullOrEmpty(CourseTextBox.Text))
+            // Add patron to the database
+            if (AddPatron(name, course, section, numberOfBooksAllowed))
             {
-                ErrorMessageLabel.Text = "Please enter a course.";
-                return;
-            }
+                // Clear input fields
+                AddName.Value = string.Empty;
+                AddCourse.Value = string.Empty;
+                AddSection.Value = string.Empty;
 
-            // Validate section
-            if (string.IsNullOrEmpty(SectionTextBox.Text))
-            {
-                ErrorMessageLabel.Text = "Please enter a section.";
-                return;
+                // Show success message
+                ShowMessage("Patron added successfully.");
             }
-
-            // Additional validation checks
-            if (!IsValidCourse(CourseTextBox.Text))
+            else
             {
-                ErrorMessageLabel.Text = "Invalid course format. Please enter a valid course.";
-                return;
+                // Show error message
+                ShowMessage("Failed to add patron. Please try again.");
             }
+        }
 
-            if (!IsValidSection(SectionTextBox.Text))
+        protected void EditButton_Click(object sender, EventArgs e)
+        {
+            string borrowerId = EditBorrowerId.Value;
+            string name = EditName.Value;
+            string course = EditCourse.Value;
+            string section = EditSection.Value;
+            int numberOfBooksAllowed = int.Parse(EditNumberOfBooksAllowed.Value);
+
+            // Update patron in the database
+            if (UpdatePatron(borrowerId, name, course, section, numberOfBooksAllowed))
             {
-                ErrorMessageLabel.Text = "Invalid section format. Please enter a valid section.";
-                return;
+                // Clear input fields
+                EditBorrowerId.Value = string.Empty;
+                EditName.Value = string.Empty;
+                EditCourse.Value = string.Empty;
+                EditSection.Value = string.Empty;
+                EditNumberOfBooksAllowed.Value = string.Empty;
+
+                // Hide edit section
+                editSection.Visible = false;
+
+                // Show success message
+                ShowMessage("Patron updated successfully.");
             }
-
-            // Create new row in borrowerinfo table
-            using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString))
+            else
             {
-                try
+                // Show error message
+                ShowMessage("Failed to update patron. Please try again.");
+            }
+        }
+
+        protected void DeleteButton_Click(object sender, EventArgs e)
+        {
+            string borrowerId = DeleteBorrowerId.Value;
+
+            // Retrieve patron details from the database
+            DataTable patronDetails = GetPatronDetails(borrowerId);
+
+            if (patronDetails.Rows.Count > 0)
+            {
+                // Display patron details in delete section
+                DeleteName.Value = patronDetails.Rows[0]["borrowerName"].ToString();
+                DeleteCourse.Value = patronDetails.Rows[0]["course"].ToString();
+                DeleteSection.Value = patronDetails.Rows[0]["section"].ToString();
+                DeleteNumberOfBooksAllowed.Value = patronDetails.Rows[0]["numberofbooksallowed"].ToString();
+
+                // Show delete section
+                deleteSection.Visible = true;
+            }
+            else
+            {
+                // Clear patron details
+                DeleteName.Value = string.Empty;
+                DeleteCourse.Value = string.Empty;
+                DeleteSection.Value = string.Empty;
+                DeleteNumberOfBooksAllowed.Value     = string.Empty;
+
+                // Hide delete section
+                deleteSection.Visible = false;
+
+                // Show error message
+                ShowMessage("Patron not found.");
+            }
+        }
+
+        protected void ConfirmDeleteButton_Click(object sender, EventArgs e)
+        {
+            string borrowerId = DeleteBorrowerId.Value;
+
+            // Delete patron from the database
+            if (DeletePatron(borrowerId))
+            {
+                // Clear input fields
+                DeleteBorrowerId.Value = string.Empty;
+                DeleteName.Value = string.Empty;
+                DeleteCourse.Value = string.Empty;
+                DeleteSection.Value = string.Empty;
+                DeleteNumberOfBooksAllowed.Value = string.Empty;
+
+                // Hide delete section
+                deleteSection.Visible = false;
+                deleteConfirmation.Visible = false;
+
+                // Show success message
+                ShowMessage("Patron deleted successfully.");
+            }
+            else
+            {
+                // Show error message
+                ShowMessage("Failed to delete patron. Please try again.");
+            }
+        }
+
+        protected void SearchButton_Click(object sender, EventArgs e)
+        {
+            string borrowerId = SearchBorrowerId.Value;
+
+            // Retrieve patron details from the database
+            DataTable patronDetails = GetPatronDetails(borrowerId);
+
+            if (patronDetails.Rows.Count > 0)
+            {
+                // Display patron details in search results
+                SearchName.Value = patronDetails.Rows[0]["borrowerName"].ToString();
+                SearchCourse.Value = patronDetails.Rows[0]["course"].ToString();
+                SearchSection.Value = patronDetails.Rows[0]["section"].ToString();
+                SearchNumberOfBooksAllowed.Value = patronDetails.Rows[0]["numberofbooksallowed"].ToString();
+
+                // Show search results
+                searchResults.Visible = true;
+            }
+            else
+            {
+                // Clear patron details
+                SearchName.Value = string.Empty;
+                SearchCourse.Value = string.Empty;
+                SearchSection.Value = string.Empty;
+                SearchNumberOfBooksAllowed.Value = string.Empty;
+
+                // Hide search results
+                searchResults.Visible = false;
+
+                // Show error message
+                ShowMessage("Patron not found.");
+            }
+        }
+
+        private bool AddPatron(string name, string course, string section, int numberOfBooksAllowed)
+        {
+            try
+            {
+                string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionString"].ConnectionString;
+
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    connection.Open();
-
-                    // Generate a new borrowerid value
-                    string borrowerId = GenerateBorrowerId(connection);
-
-                    string query = "INSERT INTO borrowerinfo (borrowerid, borrowerName, course, section) VALUES (@borrowerid, @borrowerName, @course, @section)";
-                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    string query = "INSERT INTO borrowerinfo (borrowerName, course, section, numberofbooksallowed) VALUES (@Name, @Course, @Section, @NumberOfBooksAllowed)";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        command.Parameters.AddWithValue("@borrowerid", borrowerId);
-                        command.Parameters.AddWithValue("@borrowerName", BorrowerNameTextBox.Text);
-                        command.Parameters.AddWithValue("@course", CourseTextBox.Text);
-                        command.Parameters.AddWithValue("@section", SectionTextBox.Text);
+                        cmd.Parameters.AddWithValue("@Name", name);
+                        cmd.Parameters.AddWithValue("@Course", course);
+                        cmd.Parameters.AddWithValue("@Section", section);
+                        cmd.Parameters.AddWithValue("@NumberOfBooksAllowed", numberOfBooksAllowed);
 
-                        command.ExecuteNonQuery();
+                        conn.Open();
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        conn.Close();
+
+                        return rowsAffected > 0;
                     }
-
-                    // Display confirmation message
-                    SuccessMessageLabel.Text = "New borrower added successfully!";
-                }
-                catch (MySqlException ex)
-                {
-                    // Handle database-related exceptions
-                    ErrorMessageLabel.Text = "An error occurred while adding the borrower: " + ex.Message;
                 }
             }
-        }
-
-        private string GenerateBorrowerId(MySqlConnection connection)
-        {
-            string borrowerId = string.Empty;
-
-            // Generate a new borrowerid value based on the existing borrowers in the database
-            string query = "SELECT MAX(CAST(SUBSTRING(borrowerid, 6) AS UNSIGNED)) FROM borrowerinfo";
-            using (MySqlCommand command = new MySqlCommand(query, connection))
+            catch (Exception ex)
             {
-                object result = command.ExecuteScalar();
-                if (result != null && result != DBNull.Value)
+                // Handle exception
+                return false;
+            }
+        }
+
+        private bool UpdatePatron(string borrowerId, string name, string course, string section, int numberOfBooksAllowed)
+        {
+            try
+            {
+                string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionString"].ConnectionString;
+
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    int lastBorrowerId = Convert.ToInt32(result);
-                    int newBorrowerId = lastBorrowerId + 1;
-                    borrowerId = "2023-" + newBorrowerId.ToString("D3");
-                }
-                else
-                {
-                    borrowerId = "2023-001";
+                    string query = "UPDATE borrowerinfo SET borrowerName = @Name, course = @Course, section = @Section, numberofbooksallowed = @NumberOfBooksAllowed WHERE borrowerid = @BorrowerId";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Name", name);
+                        cmd.Parameters.AddWithValue("@Course", course);
+                        cmd.Parameters.AddWithValue("@Section", section);
+                        cmd.Parameters.AddWithValue("@NumberOfBooksAllowed", numberOfBooksAllowed);
+                        cmd.Parameters.AddWithValue("@BorrowerId", borrowerId);
+
+                        conn.Open();
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        conn.Close();
+
+                        return rowsAffected > 0;
+                    }
                 }
             }
-
-            return borrowerId;
+            catch (Exception ex)
+            {
+                // Handle exception
+                return false;
+            }
         }
 
-        private bool IsValidCourse(string course)
+        private DataTable GetPatronDetails(string borrowerId)
         {
-            // Perform custom validation for the course format
-            // For example, check if it consists of two letters followed by three digits
-            return Regex.IsMatch(course, "^[A-Z]{2}\\d{3}$");
+            try
+            {
+                string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionString"].ConnectionString;
+
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    string query = "SELECT borrowerName, course, section, numberofbooksallowed FROM borrowerinfo WHERE borrowerid = @BorrowerId";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@BorrowerId", borrowerId);
+
+                        conn.Open();
+                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        conn.Close();
+
+                        return dt;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+                return null;
+            }
         }
 
-        private bool IsValidSection(string section)
+        private bool DeletePatron(string borrowerId)
         {
-            // Perform custom validation for the section format
-            // For example, check if it consists of three alphanumeric characters
-            return Regex.IsMatch(section, "^[A-Za-z0-9]{3}$");
+            try
+            {
+                string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionString"].ConnectionString;
+
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    string query = "DELETE FROM borrowerinfo WHERE borrowerid = @BorrowerId";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@BorrowerId", borrowerId);
+
+                        conn.Open();
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        conn.Close();
+
+                        return rowsAffected > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+                return false;
+            }
         }
 
+
+        private void ShowMessage(string message)
+        {
+            ClientScript.RegisterStartupScript(GetType(), "LibraryManagementSystem", $"alert('{message}');", true);
+        }
     }
 }
