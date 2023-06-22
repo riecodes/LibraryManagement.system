@@ -30,25 +30,22 @@
         <div class="container">            
             <div class="content">
                 <form id="form" runat="server">
-                    <h2>Borrow Book</h2>
-                    <hr />
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="BookIdTextBox">Book ID:</label>
-                                <asp:TextBox ID="BookIdTextBox" runat="server" CssClass="form-control"></asp:TextBox>
-                            </div>
-                            <div class="form-group">
-                                <label for="BookIdDropDownList">Book ID:</label>
-                                <asp:DropDownList ID="BookIdDropDownList" runat="server" CssClass="form-control"></asp:DropDownList>
-                            </div>
-                            <div class="form-group">
-                                <label for="BorrowerIdTextBox">Borrower ID:</label>
-                                <asp:TextBox ID="BorrowerIdTextBox" runat="server" CssClass="form-control"></asp:TextBox>
-                            </div>
-                            <asp:Button ID="BorrowButton" runat="server" Text="Borrow" CssClass="btn btn-primary" OnClick="BorrowButton_Click" />
-                            <asp:Label ID="ErrorMessageLabel" runat="server" Text="" CssClass="text-danger mt-3"></asp:Label>
-                            <asp:Label ID="SuccessMessageLabel" runat="server" Text="" CssClass="text-success mt-3"></asp:Label>
+                    <div>
+                        <h2>Borrow Book</h2>
+                        <div>
+                            <label>Borrower ID:</label>
+                            <asp:TextBox ID="BorrowerIdTextBox" runat="server"></asp:TextBox>
+                        </div>
+                        <div>
+                            <label>Book ID:</label>
+                            <asp:TextBox ID="BookIdTextBox" runat="server"></asp:TextBox>
+                        </div>
+                        <div>
+                            <asp:Button ID="BorrowButton" runat="server" Text="Borrow" OnClick="BorrowButton_Click" />
+                        </div>
+                        <div>
+                            <asp:Label ID="ErrorMessageLabel" runat="server" ForeColor="Red"></asp:Label>
+                            <asp:Label ID="SuccessMessageLabel" runat="server" ForeColor="Green"></asp:Label>
                         </div>
                     </div>
                 </form>

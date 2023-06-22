@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ReturnBook.aspx.cs" Inherits="LibraryManagement.system.BorrowBook" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ReturnBook.aspx.cs" Inherits="LibraryManagement.system.ReturnBook" %>
 
 <!DOCTYPE html>
 
@@ -28,6 +28,22 @@
         <div class="content">
             <form id="form" runat="server">
                 <div>
+                    <h2>Return Book</h2>
+                    <div class="form-group">
+                        <label for="BorrowerIdTextBox">Borrower ID:</label>
+                        <input type="text" id="BorrowerIdTextBox" runat="server" />
+                    </div>
+                    <div class="form-group">
+                        <label for="BookIdTextBox">Book ID:</label>
+                        <input type="text" id="BookIdTextBox" runat="server" />
+                    </div>
+                    <div class="form-group">
+                        <asp:Label ID="ErrorMessageLabel" runat="server" CssClass="error-message"></asp:Label>
+                        <asp:Label ID="SuccessMessageLabel" runat="server" CssClass="success-message"></asp:Label>
+                    </div>
+                    <div class="form-group">
+                        <asp:Button ID="ReturnButton" runat="server" Text="Return" OnClick="ReturnButton_Click" />
+                    </div>
                 </div>
             </form>  
         </div>

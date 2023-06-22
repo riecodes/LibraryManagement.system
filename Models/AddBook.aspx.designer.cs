@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LibraryManagement.system.Models
+namespace LibraryManagement.system
 {
 
 
@@ -30,16 +30,34 @@ namespace LibraryManagement.system.Models
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBookCategory;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtBookCategory;
 
         /// <summary>
-        /// txtBookCatDetail control.
+        /// rfvBookCategory control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBookCatDetail;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvBookCategory;
+
+        /// <summary>
+        /// txtBookCategoryDetail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtBookCategoryDetail;
+
+        /// <summary>
+        /// rfvBookCategoryDetail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvBookCategoryDetail;
 
         /// <summary>
         /// txtBookTitle control.
@@ -48,7 +66,16 @@ namespace LibraryManagement.system.Models
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBookTitle;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtBookTitle;
+
+        /// <summary>
+        /// rfvBookTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvBookTitle;
 
         /// <summary>
         /// txtCopyNum control.
@@ -57,7 +84,16 @@ namespace LibraryManagement.system.Models
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCopyNum;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl txtCopyNum;
+
+        /// <summary>
+        /// rfvCopyNum control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvCopyNum;
 
         /// <summary>
         /// txtNumberOfDaysAllowed control.
@@ -66,7 +102,16 @@ namespace LibraryManagement.system.Models
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNumberOfDaysAllowed;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl txtNumberOfDaysAllowed;
+
+        /// <summary>
+        /// rfvNumberOfDaysAllowed control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNumberOfDaysAllowed;
 
         /// <summary>
         /// btnAddBook control.
@@ -78,12 +123,12 @@ namespace LibraryManagement.system.Models
         protected global::System.Web.UI.WebControls.Button btnAddBook;
 
         /// <summary>
-        /// lblMessage control.
+        /// lblErrorMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
+        protected global::System.Web.UI.WebControls.Label lblErrorMessage;
     }
 }

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx" Inherits="LibraryManagement.system.Models.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="LibraryManagement.system.Models.Default" %>
 
 <!DOCTYPE html>
 
@@ -9,9 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Montserrat&family=Roboto&display=swap" rel="stylesheet"/>
-=======
     <link rel="stylesheet" href="css/default.css" />
->>>>>>> 15a359f1eff1f24e44eaeba13887018e7515bca2
 </head>
 <body>
     <div class="container">

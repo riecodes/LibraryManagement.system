@@ -1,75 +1,128 @@
 ﻿using System;
 using System.Configuration;
-using System.Data;
 using MySql.Data.MySqlClient;
 
-namespace LibraryManagement.system.Models
+namespace LibraryManagement.system
 {
     public partial class AddBook : System.Web.UI.Page
     {
-        protected void BtnAddBook_Click(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            if (!IsPostBack)
+            {
+                lblErrorMessage.Text = "";
+            }
+        }
 
-            string bookCategory = txtBookCategory.Text;
-            string bookCatDetail = txtBookCatDetail.Text;
-            string bookTitle = txtBookTitle.Text;
-            int copyNum;
-            int.TryParse(txtCopyNum.Text, out copyNum);
-            string status = "IN";
-            int numberOfDaysAllowed = string.IsNullOrEmpty(txtNumberOfDaysAllowed.Text) ? 3 : int.Parse(txtNumberOfDaysAllowed.Text);
+        protected void btnAddBook_Click(object sender, EventArgs e)
+        {
+            string bookCategory = txtBookCategory.Value.Trim();
+            string bookCategoryDetail = txtBookCategoryDetail.Value.Trim();
+            string bookTitle = txtBookTitle.Value.Trim();
+            string copyNumValue = txtCopyNum.Value.Trim();
+            string numberOfDaysAllowedValue = txtNumberOfDaysAllowed.Value.Trim();
 
-            // Generate the book ID
-            string bookID = GenerateBookID(bookCategory, copyNum);
+            // Validate input
+            if (string.IsNullOrEmpty(bookCategory))
+            {
+                lblErrorMessage.Text = "Please enter the book category.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(bookCategoryDetail))
+            {
+                lblErrorMessage.Text = "Please enter the book category detail.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(bookTitle))
+            {
+                lblErrorMessage.Text = "Please enter the book title.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(copyNumValue))
+            {
+                lblErrorMessage.Text = "Please enter the copy number.";
+                return;
+            }
+
+            if (!int.TryParse(copyNumValue, out int copyNum) || copyNum <= 0)
+            {
+                lblErrorMessage.Text = "Invalid copy number. Please enter a valid positive integer.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(numberOfDaysAllowedValue))
+            {
+                lblErrorMessage.Text = "Please enter the number of days allowed.";
+                return;
+            }
+
+            if (!int.TryParse(numberOfDaysAllowedValue, out int numberOfDaysAllowed) || numberOfDaysAllowed <= 0)
+            {
+                lblErrorMessage.Text = "Invalid number of days allowed. Please enter a valid positive integer.";
+                return;
+            }
 
             try
             {
+                string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
 
                     // Check if the book already exists
-                    string checkQuery = "SELECT COUNT(*) FROM bookinfo WHERE booktitle = @booktitle";
-                    MySqlCommand checkCommand = new MySqlCommand(checkQuery, connection);
-                    checkCommand.Parameters.AddWithValue("@booktitle", bookTitle);
-                    int existingCount = Convert.ToInt32(checkCommand.ExecuteScalar());
-
-                    if (existingCount > 0)
+                    string checkQuery = "SELECT COUNT(*) FROM bookinfo WHERE bookcategory = @bookCategory AND bookcatdetail = @bookCategoryDetail AND booktitle = @bookTitle";
+                    using (MySqlCommand checkCommand = new MySqlCommand(checkQuery, connection))
                     {
-                        // Book already exists, show error message
-                        lblMessage.Text = "The book already exists.";
-                        return;
+                        checkCommand.Parameters.AddWithValue("@bookCategory", bookCategory);
+                        checkCommand.Parameters.AddWithValue("@bookCategoryDetail", bookCategoryDetail);
+                        checkCommand.Parameters.AddWithValue("@bookTitle", bookTitle);
+                        int existingBooksCount = Convert.ToInt32(checkCommand.ExecuteScalar());
+
+                        if (existingBooksCount > 0)
+                        {
+                            lblErrorMessage.Text = "The book already exists.";
+                            return;
+                        }
                     }
 
+                    // Generate book ID
+                    string bookID = GenerateBookID(bookCategory, copyNum);
+
                     // Insert the book into the database
-                    string insertQuery = "INSERT INTO bookinfo (bookcategory, bookcatdetail, booktitle, copynum, status, numberofdaysallowed) " +
-                                         "VALUES (@bookcategory, @bookcatdetail, @booktitle, @copynum, @status, @numberofdaysallowed)";
-                    MySqlCommand insertCommand = new MySqlCommand(insertQuery, connection);
-                    insertCommand.Parameters.AddWithValue("@bookcategory", bookCategory);
-                    insertCommand.Parameters.AddWithValue("@bookcatdetail", bookCatDetail);
-                    insertCommand.Parameters.AddWithValue("@booktitle", bookTitle);
-                    insertCommand.Parameters.AddWithValue("@copynum", copyNum);
-                    insertCommand.Parameters.AddWithValue("@status", status);
-                    insertCommand.Parameters.AddWithValue("@numberofdaysallowed", numberOfDaysAllowed);
-                    insertCommand.ExecuteNonQuery();
+                    string insertQuery = "INSERT INTO bookinfo (bookcategory, bookcatdetail, bookid, booktitle, copynum, status, numberofdaysallowed) VALUES (@bookCategory, @bookCategoryDetail, @bookID, @bookTitle, @copyNum, 'IN', @numberOfDaysAllowed)";
+                    using (MySqlCommand insertCommand = new MySqlCommand(insertQuery, connection))
+                    {
+                        insertCommand.Parameters.AddWithValue("@bookCategory", bookCategory);
+                        insertCommand.Parameters.AddWithValue("@bookCategoryDetail", bookCategoryDetail);
+                        insertCommand.Parameters.AddWithValue("@bookID", bookID);
+                        insertCommand.Parameters.AddWithValue("@bookTitle", bookTitle);
+                        insertCommand.Parameters.AddWithValue("@copyNum", copyNum);
+                        insertCommand.Parameters.AddWithValue("@numberOfDaysAllowed", numberOfDaysAllowed);
+                        insertCommand.ExecuteNonQuery();
+                    }
 
                     // Display success message
-                    lblMessage.Text = "Book added successfully.";
+                    lblErrorMessage.Text = "Book added successfully.";
+
                 }
             }
             catch (Exception ex)
             {
-                lblMessage.Text = "Error: " + ex.Message;
+                lblErrorMessage.Text = "An error occurred: " + ex.Message;
             }
         }
-        // Method to generate the book ID
+
+
+
         private string GenerateBookID(string bookCategory, int copyNum)
         {
-            string categoryCode = bookCategory.Length >= 2 ? bookCategory.Substring(0, 2).ToUpper() : bookCategory.ToUpper();
+            // Example: BC01-001
+            string categoryCode = bookCategory.Substring(0, 2).ToUpper();
             string copyNumFormatted = copyNum.ToString().PadLeft(3, '0');
-
-            return $"{categoryCode}-{copyNumFormatted}";
+            return categoryCode + "-" + copyNumFormatted;
         }
-
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
-using MySql.Data.MySqlClient;
 using System.Configuration;
 using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace LibraryManagement.system
 {
@@ -9,21 +9,16 @@ namespace LibraryManagement.system
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
-            {
-                // Populate the Book ID dropdown list
-                PopulateBookIdDropDownList();
-            }
         }
 
         protected void BorrowButton_Click(object sender, EventArgs e)
         {
             string borrowerId = BorrowerIdTextBox.Text;
-            string bookId = BookIdDropDownList.SelectedValue;
+            string bookId = BookIdTextBox.Text;
 
             if (string.IsNullOrEmpty(borrowerId) && string.IsNullOrEmpty(bookId))
             {
-                ErrorMessageLabel.Text = "Please enter the borrower ID and select a book.";
+                ErrorMessageLabel.Text = "Please enter the borrower ID and book ID.";
                 SuccessMessageLabel.Text = "";
             }
             else if (string.IsNullOrEmpty(borrowerId))
@@ -33,7 +28,7 @@ namespace LibraryManagement.system
             }
             else if (string.IsNullOrEmpty(bookId))
             {
-                ErrorMessageLabel.Text = "Please select a book.";
+                ErrorMessageLabel.Text = "Please enter the book ID.";
                 SuccessMessageLabel.Text = "";
             }
             else
@@ -42,24 +37,33 @@ namespace LibraryManagement.system
                 {
                     if (ValidateBookAvailability(bookId))
                     {
-                        // Update book status to "OUT" in the database
-                        UpdateBookStatus(bookId, "OUT");
+                        // Check if the borrower already has maximum allowed books borrowed on the same day
+                        if (HasMaximumBooksBorrowedOnSameDay(borrowerId))
+                        {
+                            ErrorMessageLabel.Text = "The maximum number of books allowed to borrow on the same day has been reached.";
+                            SuccessMessageLabel.Text = "";
+                        }
+                        else
+                        {
+                            // Update book status to "OUT" in the database
+                            UpdateBookStatus(bookId, "OUT");
 
-                        // Decrement the borrower's numberofbooksallowed by 1
-                        DecrementNumberOfBooksAllowed(borrowerId);
+                            // Decrement the borrower's numberofbooksallowed by 1
+                            DecrementNumberOfBooksAllowed(borrowerId);
 
-                        // Generate transaction details
-                        string transactionId = GenerateTransactionId("B-DATE-");
-                        string transactionCatId = "CAT001";
-                        string transactionCatDetail = "BORROW";
-                        DateTime transactionDate = DateTime.Now;
+                            // Generate transaction details
+                            string transactionId = GenerateTransactionId("B-DATE-");
+                            string transactionCatId = GetBookCategory(bookId);
+                            string transactionCatDetail = "BORROW";
+                            DateTime transactionDate = DateTime.Now;
 
-                        // Insert the transaction record into the database
-                        InsertTransactionRecord(transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
+                            // Insert the transaction record into the database
+                            InsertTransactionRecord(transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
 
-                        // Display success message
-                        SuccessMessageLabel.Text = "Book borrowed successfully.";
-                        ErrorMessageLabel.Text = "";
+                            // Display success message
+                            SuccessMessageLabel.Text = "Book borrowed successfully.";
+                            ErrorMessageLabel.Text = "";
+                        }
                     }
                     else
                     {
@@ -71,27 +75,6 @@ namespace LibraryManagement.system
                 {
                     ErrorMessageLabel.Text = "Borrower ID not found.";
                     SuccessMessageLabel.Text = "";
-                }
-            }
-        }
-
-        private void PopulateBookIdDropDownList()
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
-            string query = "SELECT bookid FROM bookinfo";
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                using (MySqlCommand command = new MySqlCommand(query, connection))
-                {
-                    connection.Open();
-                    using (MySqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string bookId = reader["bookid"].ToString();
-                            BookIdDropDownList.Items.Add(bookId);
-                        }
-                    }
                 }
             }
         }
@@ -124,6 +107,39 @@ namespace LibraryManagement.system
                     connection.Open();
                     string status = Convert.ToString(command.ExecuteScalar());
                     return status == "IN";
+                }
+            }
+        }
+
+        private bool HasMaximumBooksBorrowedOnSameDay(string borrowerId)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            string query = "SELECT COUNT(*) FROM transactioninfo WHERE borrowerid = @BorrowerId AND transcatdetail = 'BORROW' AND DATE(transdate) = @TransactionDate";
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@BorrowerId", borrowerId);
+                    command.Parameters.AddWithValue("@TransactionDate", DateTime.Today);
+                    connection.Open();
+                    int count = Convert.ToInt32(command.ExecuteScalar());
+                    return count >= 3; // Maximum 3 books allowed to borrow on the same day
+                }
+            }
+        }
+
+        private string GetBookCategory(string bookId)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            string query = "SELECT category FROM bookinfo WHERE bookid = @BookId";
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@BookId", bookId);
+                    connection.Open();
+                    string category = Convert.ToString(command.ExecuteScalar());
+                    return category;
                 }
             }
         }

@@ -24,24 +24,6 @@ namespace LibraryManagement.system
         protected global::System.Web.UI.HtmlControls.HtmlForm form2;
 
         /// <summary>
-        /// BookIdTextBox control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox BookIdTextBox;
-
-        /// <summary>
-        /// BookIdDropDownList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList BookIdDropDownList;
-
-        /// <summary>
         /// BorrowerIdTextBox control.
         /// </summary>
         /// <remarks>
@@ -49,6 +31,15 @@ namespace LibraryManagement.system
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox BorrowerIdTextBox;
+
+        /// <summary>
+        /// BookIdTextBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox BookIdTextBox;
 
         /// <summary>
         /// BorrowButton control.
