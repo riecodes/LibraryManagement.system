@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Configuration;
 using System.Data;
-using System.Web.UI.WebControls;
+using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
+using System.Web.UI.WebControls;
 
 namespace LibraryManagement.system.Models
 {
@@ -12,212 +13,180 @@ namespace LibraryManagement.system.Models
         {
             if (!IsPostBack)
             {
-                BindBookGrid();
+                BindGrid();
             }
         }
 
         protected void btnAddBook_Click(object sender, EventArgs e)
         {
-            string bookCategory = txtBookCategory.Value.Trim();
-            string bookCategoryDetail = txtBookCategoryDetail.Value.Trim();
-            string bookTitle = txtBookTitle.Value.Trim();
-            int copyNum = Convert.ToInt32(txtCopyNum.Value.Trim());
-            int numberOfDaysAllowed = Convert.ToInt32(txtNumberOfDaysAllowed.Value.Trim());
+            string bookCategory = txtBookCategory.Value;
+            string bookCategoryDetail = txtBookCategoryDetail.Value;
+            string bookTitle = txtBookTitle.Value;
+            int copyNumber = Convert.ToInt32(txtCopyNum.Value);
+            int daysAllowed = Convert.ToInt32(txtNumberOfDaysAllowed.Value);
 
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
-
             using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                string query = "INSERT INTO bookinfo (bookcategory, bookcatdetail, bookid, booktitle, copynum, numberofdaysallowed) " +
-                               "VALUES (@BookCategory, @BookCategoryDetail, @BookID, @BookTitle, @CopyNum, @NumberOfDaysAllowed)";
+                string query = "INSERT INTO bookinfo (bookcategory, bookcatdetail, bookid, booktitle, copynum, numberofdaysallowed, status) " +
+                               "VALUES (@BookCategory, @BookCategoryDetail, @BookID, @BookTitle, @CopyNumber, @DaysAllowed, 'IN')";
 
-                using (MySqlCommand cmd = new MySqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@BookCategory", bookCategory);
-                    cmd.Parameters.AddWithValue("@BookCategoryDetail", bookCategoryDetail);
-                    cmd.Parameters.AddWithValue("@BookID", GenerateBookID(bookCategory, copyNum));
-                    cmd.Parameters.AddWithValue("@BookTitle", bookTitle);
-                    cmd.Parameters.AddWithValue("@CopyNum", copyNum);
-                    cmd.Parameters.AddWithValue("@NumberOfDaysAllowed", numberOfDaysAllowed);
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@BookCategory", bookCategory);
+                cmd.Parameters.AddWithValue("@BookCategoryDetail", bookCategoryDetail);
+                cmd.Parameters.AddWithValue("@BookID", Guid.NewGuid().ToString("N"));
+                cmd.Parameters.AddWithValue("@BookTitle", bookTitle);
+                cmd.Parameters.AddWithValue("@CopyNumber", copyNumber);
+                cmd.Parameters.AddWithValue("@DaysAllowed", daysAllowed);
 
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                }
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
             }
 
-            ClearAddBookForm();
-            BindBookGrid();
+            ClearFields();
+            BindGrid();
+        }
+
+        protected void BindGrid()
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM bookinfo";
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                BookGridView.DataSource = dt;
+                BookGridView.DataBind();
+            }
+        }
+
+        protected void BookGridView_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            BookGridView.EditIndex = e.NewEditIndex;
+            BindGrid();
+        }
+
+        protected void BookGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            BookGridView.EditIndex = -1;
+            BindGrid();
+        }
+
+        protected void BookGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            string bookID = BookGridView.DataKeys[e.RowIndex].Value.ToString();
+            GridViewRow row = BookGridView.Rows[e.RowIndex];
+            TextBox txtBookCategory = (TextBox)row.FindControl("txtBookCategory");
+            TextBox txtBookCategoryDetail = (TextBox)row.FindControl("txtBookCategoryDetail");
+            TextBox txtBookTitle = (TextBox)row.FindControl("txtBookTitle");
+            TextBox txtCopyNumber = (TextBox)row.FindControl("txtCopyNumber");
+            TextBox txtDaysAllowed = (TextBox)row.FindControl("txtDaysAllowed");
+
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                string query = "UPDATE bookinfo SET bookcategory = @BookCategory, bookcatdetail = @BookCategoryDetail, " +
+                               "booktitle = @BookTitle, copynum = @CopyNumber, numberofdaysallowed = @DaysAllowed " +
+                               "WHERE bookid = @BookID";
+
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@BookCategory", txtBookCategory.Text);
+                cmd.Parameters.AddWithValue("@BookCategoryDetail", txtBookCategoryDetail.Text);
+                cmd.Parameters.AddWithValue("@BookTitle", txtBookTitle.Text);
+                cmd.Parameters.AddWithValue("@CopyNumber", Convert.ToInt32(txtCopyNumber.Text));
+                cmd.Parameters.AddWithValue("@DaysAllowed", Convert.ToInt32(txtDaysAllowed.Text));
+                cmd.Parameters.AddWithValue("@BookID", bookID);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+
+            BookGridView.EditIndex = -1;
+            BindGrid();
+        }
+
+        protected void BookGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            string bookID = BookGridView.DataKeys[e.RowIndex].Value.ToString();
+
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                string query = "DELETE FROM bookinfo WHERE bookid = @BookID";
+
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@BookID", bookID);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+
+            BindGrid();
+        }
+
+        private void ClearFields()
+        {
+            txtBookCategory.Value = "";
+            txtBookCategoryDetail.Value = "";
+            txtBookTitle.Value = "";
+            txtCopyNum.Value = "";
+            txtNumberOfDaysAllowed.Value = "";
         }
 
         protected void SearchBookButton_Click(object sender, EventArgs e)
         {
-            string searchBookName = SearchBook.Text.Trim();
-            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            string searchQuery = SearchBook.Text;
 
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
             using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                string query = "SELECT * FROM bookinfo WHERE booktitle LIKE @SearchBookName";
-                using (MySqlCommand cmd = new MySqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@SearchBookName", "%" + searchBookName + "%");
+                string query = "SELECT * FROM bookinfo WHERE booktitle LIKE @SearchQuery";
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@SearchQuery", "%" + searchQuery + "%");
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
 
-                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
+                SearchBookGridView.DataSource = dt;
+                SearchBookGridView.DataBind();
 
-                    SearchBookGridView.DataSource = dt;
-                    SearchBookGridView.DataBind();
-
-                    SearchBookResults.Text = "Total books found: " + dt.Rows.Count;
-                }
+                SearchBookResults.Text = "Search Results: " + dt.Rows.Count + " books found.";
             }
         }
 
         protected void DeleteBookButton_Click(object sender, EventArgs e)
         {
-            string deleteBookID = DeleteBookId.Text.Trim();
+            string bookID = DeleteBookId.Text;
 
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
-
             using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                string query = "DELETE FROM bookinfo WHERE bookid = @DeleteBookID";
+                string query = "DELETE FROM bookinfo WHERE bookid = @BookID";
 
-                using (MySqlCommand cmd = new MySqlCommand(query, con))
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@BookID", bookID);
+
+                con.Open();
+                int rowsAffected = cmd.ExecuteNonQuery();
+                con.Close();
+
+                if (rowsAffected > 0)
                 {
-                    cmd.Parameters.AddWithValue("@DeleteBookID", deleteBookID);
-
-                    con.Open();
-                    cmd.ExecuteNonQuery();
+                    DeleteBookConfirmation.Text = "Book deleted successfully.";
+                }
+                else
+                {
+                    DeleteBookConfirmation.Text = "Book not found.";
                 }
             }
 
-            ClearDeleteBookForm();
-            BindBookGrid();
-        }
-
-        private void BindBookGrid()
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
-
-            using (MySqlConnection con = new MySqlConnection(connectionString))
-            {
-                string query = "SELECT * FROM bookinfo";
-
-                using (MySqlCommand cmd = new MySqlCommand(query, con))
-                {
-                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-
-                    BookGridView.DataSource = dt;
-                    BookGridView.DataBind();
-                }
-            }
-        }
-
-        private string GenerateBookID(string bookCategory, int copyNum)
-        {
-            // Example: BC01-001
-            string categoryCode = bookCategory.Substring(0, 2).ToUpper();
-            string copyNumFormatted = copyNum.ToString().PadLeft(3, '0');
-            return categoryCode + "-" + copyNumFormatted;
-        }
-
-
-        private void ClearAddBookForm()
-        {
-            txtBookCategory.Value = string.Empty;
-            txtBookCategoryDetail.Value = string.Empty;
-            txtBookTitle.Value = string.Empty;
-            txtCopyNum.Value = string.Empty;
-            txtNumberOfDaysAllowed.Value = string.Empty;
-        }
-
-        private void ClearDeleteBookForm()
-        {
-            DeleteBookId.Text = string.Empty;
-        }
-
-        protected void gridViewBooks_RowEditing(object sender, GridViewEditEventArgs e)
-        {
-            gridViewBooks.EditIndex = e.NewEditIndex;
-
-            // Disable validation controls
-            rfvBookCategory.Enabled = false;
-            rfvBookCategoryDetail.Enabled = false;
-            rfvBookTitle.Enabled = false;
-            rfvCopyNumber.Enabled = false;
-            rfvDaysAllowed.Enabled = false;
-
             BindGrid();
         }
-
-        protected void gridViewBooks_RowUpdating(object sender, GridViewUpdateEventArgs e)
-        {
-            int rowIndex = e.RowIndex;
-            GridViewRow row = gridViewBooks.Rows[rowIndex];
-
-            string bookID = gridViewBooks.DataKeys[rowIndex].Values["BookID"].ToString();
-            string bookCategory = (row.FindControl("txtEditBookCategory") as TextBox).Text;
-            string bookCategoryDetail = (row.FindControl("txtEditBookCategoryDetail") as TextBox).Text;
-            string bookTitle = (row.FindControl("txtEditBookTitle") as TextBox).Text;
-            string copyNumber = (row.FindControl("txtEditCopyNumber") as TextBox).Text;
-            string daysAllowed = (row.FindControl("txtEditDaysAllowed") as TextBox).Text;
-
-            // Connection string for connecting to your MySQL database
-            string connectionString = "server=localhost;port=3306;database=lib_management_schema;uid=username;password=password;";
-
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                connection.Open();
-
-                // SQL update statement
-                string query = "UPDATE bookinfo SET bookcategory = @Category, bookcatdetail = @CategoryDetail, " +
-                               "booktitle = @Title, copynum = @CopyNumber, numberofdaysallowed = @DaysAllowed " +
-                               "WHERE bookid = @BookID";
-
-                using (MySqlCommand command = new MySqlCommand(query, connection))
-                {
-                    // Add parameters to the SQL query
-                    command.Parameters.AddWithValue("@Category", bookCategory);
-                    command.Parameters.AddWithValue("@CategoryDetail", bookCategoryDetail);
-                    command.Parameters.AddWithValue("@Title", bookTitle);
-                    command.Parameters.AddWithValue("@CopyNumber", copyNumber);
-                    command.Parameters.AddWithValue("@DaysAllowed", daysAllowed);
-                    command.Parameters.AddWithValue("@BookID", bookID);
-
-                    // Execute the SQL query
-                    command.ExecuteNonQuery();
-                }
-            }
-
-            gridViewBooks.EditIndex = -1;
-            BindGrid();
-        }
-
-        protected void gridViewBooks_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
-        {
-            gridViewBooks.EditIndex = -1;
-
-            // Enable validation controls
-            rfvBookCategory.Enabled = true;
-            rfvBookCategoryDetail.Enabled = true;
-            rfvBookTitle.Enabled = true;
-            rfvCopyNumber.Enabled = true;
-            rfvDaysAllowed.Enabled = true;
-
-            BindGrid();
-        }
-
-
-        protected void BookGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
-        {
-            string bookid = BookGridView.DataKeys[e.RowIndex].Value.ToString();
-            // Delete the book with the corresponding bookid
-
-            BindBookGrid();
-        }
-
     }
 }
