@@ -1,13 +1,33 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ManagePatrons.aspx.cs" Inherits="ManagePatrons" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="LibraryManagement.system.Models.Default" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Manage Patrons</title>
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="../App_Data/css/managepatrons.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Montserrat&family=Roboto&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/default.css" />
 </head>
 <body>
-    <form id="form3" runat="server">
+    <div class="container">
+        <!--NAVBAR START-->
+        <div class="navbar">
+            <ul>
+                <li><a href="Default.aspx"><p>Home</p></a></li>
+                <li><a href="AddBook.aspx"><p>Add Book</p></a></li>
+                <li><a href="BorrowBook.aspx"><p>Borrow Book</p></a></li>
+                <li><a href="ReturnBook.aspx"><p>Return Book</p></a></li>
+                <li><a href="ManagePatrons.aspx"><p>Manage Patrons</p></a></li>
+                <li><a href="ManageTransactions.aspx"><p>Manage Transactions</p></a></li>                
+            </ul>
+        </div>
+        <hr class="vertical-line"/>
+        <!--NAVBAR END-->
+        <div class="content">
+            <form id="form3" runat="server">
         <div>
             <h1>Manage Patrons</h1>
             <div>
@@ -26,7 +46,7 @@
                 <asp:Button ID="AddButton" runat="server" Text="Add Patron" OnClick="AddButton_Click" />
             </div>
             
-            <div id="editSection" runat="server" visible="false">
+            <div id="EditSection" runat="server" visible="false">
                 <hr />
                 <h3>Edit Patron</h3>
                 <div>
@@ -43,7 +63,7 @@
                 </div>
                 <div>
                     <label for="EditSection">Section:</label>
-                    <input type="text" id="Text1" runat="server" />
+                    <input type="text" id="EditSection" runat="server" />
                 </div>
                 <div>
                     <label for="EditNumberOfBooksAllowed">Number of Books Allowed:</label>
@@ -62,7 +82,7 @@
                 <asp:Button ID="DeleteButton" runat="server" Text="Delete Patron" OnClick="DeleteButton_Click" />
             </div>
 
-            <div id="deleteSection" runat="server" visible="false">
+            <div id="DeleteSection" runat="server" visible="false">
                 <hr />
                 <h3>Delete Patron</h3>
                 <div>
@@ -116,5 +136,7 @@
             </div>
         </div>
     </form>
+        </div>
+    </div>           
 </body>
 </html>

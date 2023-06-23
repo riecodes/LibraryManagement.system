@@ -63,7 +63,7 @@ namespace LibraryManagement.system
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     ErrorMessageLabel.Text = "An error occurred while processing the request. Please try again later.";
                     SuccessMessageLabel.Text = "";

@@ -3,7 +3,6 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Web.UI.WebControls;
-using System.Web.UI.HtmlControls;
 
 namespace LibraryManagement.system
 {
@@ -94,7 +93,7 @@ namespace LibraryManagement.system
                 DeleteName.Value = string.Empty;
                 DeleteCourse.Value = string.Empty;
                 DeleteSection.Value = string.Empty;
-                DeleteNumberOfBooksAllowed.Value     = string.Empty;
+                DeleteNumberOfBooksAllowed.Value = string.Empty;
 
                 // Hide delete section
                 deleteSection.Visible = false;
