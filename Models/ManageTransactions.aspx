@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ManageTransactions.aspx.cs" Inherits="LibraryManagement.system.Models.ManageTransactions" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ManageTransactions.aspx.cs" Inherits="LibraryManagement.system.Models.ManageTransactions" MaintainScrollPositionOnPostBack="true"%>
 
 <!DOCTYPE html>
 
@@ -16,10 +16,9 @@
         <div class="navbar">
             <ul>
                 <li><a href="Default.aspx"><p>Home</p></a></li>
-                <li><a href="AddBook.aspx"><p>Add Book</p></a></li>
                 <li><a href="BorrowBook.aspx"><p>Borrow Book</p></a></li>
                 <li><a href="ReturnBook.aspx"><p>Return Book</p></a></li>
-                <li><a href="ManagePatrons.aspx"><p>Manage Patrons</p></a></li>
+                <li><a href="ManagePatrons.aspx"><p>Manage Borrowers</p></a></li>
                 <li><a href="ManageTransactions.aspx"><p>Manage Transactions</p></a></li>                
             </ul>
         </div>
@@ -31,5 +30,10 @@
             </form>
         </div>
     </div>
+    <script>
+        function preventScrollToTop(event) {
+            event.preventDefault();
+        }
+    </script>
 </body>
 </html>

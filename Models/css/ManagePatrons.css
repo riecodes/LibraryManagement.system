@@ -8,14 +8,15 @@
 
 .navbar {
     width: 20%;
+    min-height: 100vh;
+    padding-top: 10px;
+    height: auto;
+    background-color: beige;
+    overflow: hidden;
 }
 
     .navbar ul {
         list-style-type: none;
-        min-height: 99vh;
-        padding-top: 10px;
-        height: auto;
-        background-color: beige;
     }
 
         .navbar ul li {

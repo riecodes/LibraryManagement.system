@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="BorrowBook.aspx.cs" Inherits="LibraryManagement.system.BorrowBook" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="BorrowBook.aspx.cs" Inherits="LibraryManagement.system.BorrowBook" MaintainScrollPositionOnPostBack="true"%>
 
 <!DOCTYPE html>
 
@@ -18,10 +18,9 @@
         <div class="navbar">
             <ul>
                 <li><a href="Default.aspx"><p>Home</p></a></li>
-                <li><a href="AddBook.aspx"><p>Add Book</p></a></li>
                 <li><a href="BorrowBook.aspx"><p>Borrow Book</p></a></li>
                 <li><a href="ReturnBook.aspx"><p>Return Book</p></a></li>
-                <li><a href="ManagePatrons.aspx"><p>Manage Patrons</p></a></li>
+                <li><a href="ManagePatrons.aspx"><p>Manage Borrowers</p></a></li>
                 <li><a href="ManageTransactions.aspx"><p>Manage Transactions</p></a></li>               
             </ul>
         </div>

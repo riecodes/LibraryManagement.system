@@ -33,15 +33,6 @@ namespace LibraryManagement.system.Models
         protected global::System.Web.UI.HtmlControls.HtmlInputText txtBookCategory;
 
         /// <summary>
-        /// rfvBookCategory control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvBookCategory;
-
-        /// <summary>
         /// txtBookCategoryDetail control.
         /// </summary>
         /// <remarks>
@@ -49,15 +40,6 @@ namespace LibraryManagement.system.Models
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText txtBookCategoryDetail;
-
-        /// <summary>
-        /// rfvBookCategoryDetail control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvBookCategoryDetail;
 
         /// <summary>
         /// txtBookTitle control.
@@ -69,31 +51,13 @@ namespace LibraryManagement.system.Models
         protected global::System.Web.UI.HtmlControls.HtmlInputText txtBookTitle;
 
         /// <summary>
-        /// rfvBookTitle control.
+        /// txtCopyNumber control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvBookTitle;
-
-        /// <summary>
-        /// txtCopyNum control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl txtCopyNum;
-
-        /// <summary>
-        /// rfvCopyNum control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvCopyNum;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl txtCopyNumber;
 
         /// <summary>
         /// txtNumberOfDaysAllowed control.
@@ -105,15 +69,6 @@ namespace LibraryManagement.system.Models
         protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl txtNumberOfDaysAllowed;
 
         /// <summary>
-        /// rfvNumberOfDaysAllowed control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNumberOfDaysAllowed;
-
-        /// <summary>
         /// btnAddBook control.
         /// </summary>
         /// <remarks>
@@ -123,13 +78,13 @@ namespace LibraryManagement.system.Models
         protected global::System.Web.UI.WebControls.Button btnAddBook;
 
         /// <summary>
-        /// lblErrorMessage control.
+        /// lblAddBookError control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblErrorMessage;
+        protected global::System.Web.UI.WebControls.Label lblAddBookError;
 
         /// <summary>
         /// SearchBook control.
@@ -177,6 +132,15 @@ namespace LibraryManagement.system.Models
         protected global::System.Web.UI.WebControls.GridView BookGridView;
 
         /// <summary>
+        /// lblEditBookError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblEditBookError;
+
+        /// <summary>
         /// DeleteBookId control.
         /// </summary>
         /// <remarks>
@@ -184,6 +148,15 @@ namespace LibraryManagement.system.Models
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox DeleteBookId;
+
+        /// <summary>
+        /// lblDeleteBookError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDeleteBookError;
 
         /// <summary>
         /// DeleteBookButton control.

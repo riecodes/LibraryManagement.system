@@ -12,19 +12,20 @@
 
 .navbar {
     width: 20%;
+    min-height: 100vh;
+    padding-top: 10px;
+    height: auto;
+    background-color: beige;
+    overflow: hidden;
 }
 
     .navbar ul {
         list-style-type: none;
-        min-height: 99vh;
-        padding-top: 10px;
-        height: auto;
-        background-color: beige;
+        
     }
 
         .navbar ul li {           
-            transition: 0.3s;
-            
+            transition: 0.3s;            
             margin-top: 10px;
         }
 
@@ -42,8 +43,7 @@
 
             .navbar ul li a {
                 text-decoration: none;
-                color: black;
-                
+                color: black;                
             }
 
 .vertical-line {
@@ -52,10 +52,9 @@
 }
     /*NAVBAR END*/
 
-    .content {
-        margin: auto;
+    .content {        
         width: 100%;
-        padding: 0px 50px 0px 50px;
+        padding: 0px 50px 0px 50px;       
     }
     .welcome {
         border-radius: 25px;

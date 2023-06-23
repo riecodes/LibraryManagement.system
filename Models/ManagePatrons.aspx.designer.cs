@@ -105,58 +105,22 @@ namespace LibraryManagement.system.Models
         protected global::System.Web.UI.WebControls.Label SearchPatronResults;
 
         /// <summary>
-        /// EditPatronId control.
+        /// EditPatronGridView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox EditPatronId;
+        protected global::System.Web.UI.WebControls.GridView EditPatronGridView;
 
         /// <summary>
-        /// EditPatronName control.
+        /// lblEditBookError control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox EditPatronName;
-
-        /// <summary>
-        /// EditPatronCourse control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox EditPatronCourse;
-
-        /// <summary>
-        /// EditPatronSection control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox EditPatronSection;
-
-        /// <summary>
-        /// EditPatronButton control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button EditPatronButton;
-
-        /// <summary>
-        /// EditPatronConfirmation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label EditPatronConfirmation;
+        protected global::System.Web.UI.WebControls.Label lblEditBookError;
 
         /// <summary>
         /// DeletePatronId control.

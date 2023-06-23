@@ -8,6 +8,14 @@ namespace LibraryManagement.system.Models
 {
     public partial class ManagePatrons : System.Web.UI.Page
     {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                LoadPatronData();
+            }
+        }
+
         private string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
 
         protected void AddPatronButton_Click(object sender, EventArgs e)
@@ -167,46 +175,73 @@ namespace LibraryManagement.system.Models
             }
         }
 
-
-        protected void EditPatronButton_Click(object sender, EventArgs e)
+        protected void EditPatronGridView_RowEditing(object sender, GridViewEditEventArgs e)
         {
-            string patronId = EditPatronId.Text;
-            string patronName = EditPatronName.Text;
-            string patronCourse = EditPatronCourse.Text;
-            string patronSection = EditPatronSection.Text;
+            EditPatronGridView.EditIndex = e.NewEditIndex;
+            LoadPatronData();
+        }
 
-            // Add validation and error handling if needed
+        protected void EditPatronGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            EditPatronGridView.EditIndex = -1;
+            LoadPatronData();
+        }
+        protected void EditPatronGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            GridViewRow row = EditPatronGridView.Rows[e.RowIndex];
+            string patronId = ((Label)row.FindControl("lblEditPatronId")).Text;
+            string patronName = ((TextBox)row.FindControl("txtPatronName")).Text;
+            string patronCourse = ((TextBox)row.FindControl("txtPatronCourse")).Text;
+            string patronSection = ((TextBox)row.FindControl("txtPatronSection")).Text;
+            string patronBooksAllowed = ((TextBox)row.FindControl("txtPatronBooksAllowed")).Text;
 
+            // Update the patron information in the database
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                string query = "UPDATE borrowerinfo SET borrowerName = @Name, course = @Course, section = @Section WHERE borrowerid = @PatronId";
+                string query = "UPDATE borrowerinfo SET borrowerName = @Name, course = @Course, section = @Section, numberofbooksallowed = @BooksAllowed WHERE borrowerid = @Id";
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@PatronId", patronId);
                     command.Parameters.AddWithValue("@Name", patronName);
                     command.Parameters.AddWithValue("@Course", patronCourse);
                     command.Parameters.AddWithValue("@Section", patronSection);
-
-                    try
+                    command.Parameters.AddWithValue("@BooksAllowed", patronBooksAllowed);
+                    command.Parameters.AddWithValue("@Id", patronId);
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+                    if (rowsAffected > 0)
                     {
-                        connection.Open();
-                        int rowsAffected = command.ExecuteNonQuery();
-
-                        if (rowsAffected > 0)
-                        {
-                            // Display a success message
-                            EditPatronConfirmation.Text = "Patron updated successfully";
-                        }
-                        else
-                        {
-                            // Display an error message
-                            EditPatronConfirmation.Text = "Failed to update patron";
-                        }
+                        // Update successful
+                        lblEditBookError.Text = "Patron information updated successfully.";
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        // Display an error message
-                        EditPatronConfirmation.Text = "Failed to update patron: " + ex.Message;
+                        // Update failed
+                        lblEditBookError.Text = "Failed to update patron information.";
+                    }
+                }
+            }
+
+            EditPatronGridView.EditIndex = -1;
+            LoadPatronData();
+        }
+       
+
+        protected void LoadPatronData()
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM borrowerinfo";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        EditPatronGridView.DataSource = dt;
+                        EditPatronGridView.DataBind();
                     }
                 }
             }

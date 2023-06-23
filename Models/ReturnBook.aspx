@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ReturnBook.aspx.cs" Inherits="LibraryManagement.system.ReturnBook" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ReturnBook.aspx.cs" Inherits="LibraryManagement.system.ReturnBook" MaintainScrollPositionOnPostBack="true"%>
 
 <!DOCTYPE html>
 
@@ -16,10 +16,9 @@
         <div class="navbar">
             <ul>
                 <li><a href="Default.aspx"><p>Home</p></a></li>
-                <li><a href="AddBook.aspx"><p>Add Book</p></a></li>
                 <li><a href="BorrowBook.aspx"><p>Borrow Book</p></a></li>
                 <li><a href="ReturnBook.aspx"><p>Return Book</p></a></li>
-                <li><a href="ManagePatrons.aspx"><p>Manage Patrons</p></a></li>
+                <li><a href="ManagePatrons.aspx"><p>Manage Borrowers</p></a></li>
                 <li><a href="ManageTransactions.aspx"><p>Manage Transactions</p></a></li>               
             </ul>
         </div>
@@ -42,7 +41,7 @@
                         <asp:Label ID="SuccessMessageLabel" runat="server" CssClass="success-message"></asp:Label>
                     </div>
                     <div class="form-group">
-                        <asp:Button ID="ReturnButton" runat="server" Text="Return" OnClick="ReturnButton_Click" />
+                        <asp:Button ID="ReturnButton" runat="server" Text="Return" OnClick="ReturnButton_Click"/>
                     </div>
                 </div>
             </form>  

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="LibraryManagement.system.Models.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="LibraryManagement.system.Models.Default" MaintainScrollPositionOnPostBack="true"%>
 
 <!DOCTYPE html>
 
@@ -16,106 +16,153 @@
         <div class="navbar">
             <ul>
                 <li><a href="Default.aspx"><p>Home</p></a></li>
-                <li><a href="AddBook.aspx"><p>Add Book</p></a></li>
                 <li><a href="BorrowBook.aspx"><p>Borrow Book</p></a></li>
                 <li><a href="ReturnBook.aspx"><p>Return Book</p></a></li>
-                <li><a href="ManagePatrons.aspx"><p>Manage Patrons</p></a></li>
+                <li><a href="ManagePatrons.aspx"><p>Manage Borrowers</p></a></li>
                 <li><a href="ManageTransactions.aspx"><p>Manage Transactions</p></a></li>                
             </ul>
         </div>
         <hr class="vertical-line"/>
         <!--NAVBAR END-->
         <div class="content">
-            <div class="welcome">
-                <h2>Welcome to Library Management System!</h2>
-                <h4>Kindly select the necessary tabs that suit your query :)</h4>
-            </div>
-                <form id="form" runat="server">
-                    <div class="box">                    
-                        <h2>Add Book</h2>
-                        <div class="row">
-                            <div class="form-group">
-                                <label for="txtBookCategory">Book Category:</label>
-                                <input type="text" id="txtBookCategory" name="txtBookCategory" runat="server" class="asptextbox" />
-                                <asp:RequiredFieldValidator ID="rfvBookCategory" runat="server" ControlToValidate="txtBookCategory" Text="* Please enter the book category."></asp:RequiredFieldValidator>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtBookCategoryDetail">Book Category Detail:</label>
-                                <input type="text" id="txtBookCategoryDetail" name="txtBookCategoryDetail" runat="server" class="asptextbox" />
-                                <asp:RequiredFieldValidator ID="rfvBookCategoryDetail" runat="server" ControlToValidate="txtBookCategoryDetail" Text="* Please enter the book category detail."></asp:RequiredFieldValidator>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtBookTitle">Book Title:</label>
-                                <input type="text" id="txtBookTitle" name="txtBookTitle" runat="server" class="asptextbox" />
-                                <asp:RequiredFieldValidator ID="rfvBookTitle" runat="server" ControlToValidate="txtBookTitle" Text="* Please enter the book title."></asp:RequiredFieldValidator>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtCopyNum">Copy Number:</label>
-                                <input type="number" id="txtCopyNum" name="txtCopyNum" runat="server" class="asptextbox" min="1" />
-                                <asp:RequiredFieldValidator ID="rfvCopyNum" runat="server" ControlToValidate="txtCopyNum" Text="* Please enter the copy number."></asp:RequiredFieldValidator>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtNumberOfDaysAllowed">Number of Days Allowed:</label>
-                                <input type="number" id="txtNumberOfDaysAllowed" name="txtNumberOfDaysAllowed" runat="server" class="asptextbox" min="1" />
-                                <asp:RequiredFieldValidator ID="rfvNumberOfDaysAllowed" runat="server" ControlToValidate="txtNumberOfDaysAllowed" Text="* Please enter the number of days allowed."></asp:RequiredFieldValidator>
-                            </div>
-                            <div class="form-group">
-                                <asp:Button ID="btnAddBook" runat="server" Text="Add Book" OnClick="btnAddBook_Click" CssClass="btn btn-primary" />
-                            </div>
+        <div class="welcome">
+            <h2>Welcome to Library Management System!</h2>
+            <h4>Kindly select the necessary tabs that suit your query :)</h4>
+        </div>
+            <form id="form" runat="server">
+                <div class="box">                    
+                    <h2>Add Book</h2>
+                        <div class="form-group">
+                            <label for="txtBookCategory">Book Category:</label>
+                            <input type="text" id="txtBookCategory" name="txtBookCategory" runat="server" class="asptextbox" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtBookCategoryDetail">Book Category Detail:</label>
+                            <input type="text" id="txtBookCategoryDetail" name="txtBookCategoryDetail" runat="server" class="asptextbox" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtBookTitle">Book Title:</label>
+                            <input type="text" id="txtBookTitle" name="txtBookTitle" runat="server" class="asptextbox" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtCopyNumber">Copy Number:</label>
+                            <input type="number" id="txtCopyNumber" name="txtCopyNum" runat="server" class="asptextbox" min="1" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtNumberOfDaysAllowed">Number of Days Allowed:</label>
+                            <input type="number" id="txtNumberOfDaysAllowed" name="txtNumberOfDaysAllowed" runat="server" class="asptextbox" min="1" />
+                        </div>
+                        <div class="form-group">
+                            <asp:Button ID="btnAddBook" runat="server" Text="Add Book" OnClick="BtnAddBook_Click" CssClass="btn btn-primary" />
                         </div>
                         <div class="col-md-6">
-                            <asp:Label ID="lblErrorMessage" runat="server" Text="" CssClass="error-message"></asp:Label>
+                            <asp:Label ID="lblAddBookError" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="2"></asp:Label>
                         </div>
-                    </div>
+                    </div>                    
 
-                    <div class="box">
-                        <h3>Search Book</h3>
-                        <div>
-                            <label for="SearchBook">Name:</label>
-                            <asp:TextBox CssClass="asptextbox" ID="SearchBook" runat="server"></asp:TextBox>
-                        </div>
-                        <div>
-                            <asp:Button CssClass="aspbutton" ID="SearchBookButton" runat="server" Text="Search" OnClick="SearchBookButton_Click" />
-                        </div>                    
-                        <div>
-                            <asp:GridView CssClass="aspgridview" ID="SearchBookGridView" runat="server"></asp:GridView>
-                        </div>                        
-                        <div>
-                            <asp:Label CssClass="asplabel" ID="SearchBookResults" runat="server"></asp:Label>
-                        </div>
+                <div class="box">
+                    <h3>Search Book</h3>
+                    <div>
+                        <label for="SearchBook">Book Title:</label>
+                        <asp:TextBox CssClass="asptextbox" ID="SearchBook" runat="server"></asp:TextBox>
                     </div>
+                    <div>
+                        <asp:Button CssClass="aspbutton" ID="SearchBookButton" runat="server" Text="Search" OnClick="SearchBookButton_Click" />
+                    </div>                    
+                    <div>
+                        <asp:GridView CssClass="aspgridview" ID="SearchBookGridView" runat="server"></asp:GridView>
+                    </div>                        
+                    <div>
+                        <asp:Label CssClass="asplabel" ID="SearchBookResults" runat="server"></asp:Label>
+                    </div>
+                </div>
 
-                    <div class="box">
-                        <h3>Edit Book</h3>
-                        <asp:GridView ID="BookGridView" runat="server" AutoGenerateColumns="False" OnRowEditing="BookGridView_RowEditing" OnRowCancelingEdit="BookGridView_RowCancelingEdit" OnRowUpdating="BookGridView_RowUpdating" OnRowDeleting="BookGridView_RowDeleting">
-                            <Columns>
-                                <asp:BoundField DataField="bookcategory" HeaderText="Book Category" SortExpression="bookcategory" />
-                                <asp:BoundField DataField="bookcatdetail" HeaderText="Book Category Detail" SortExpression="bookcatdetail" />
-                                <asp:BoundField DataField="bookid" HeaderText="Book ID" SortExpression="bookid" />
-                                <asp:BoundField DataField="booktitle" HeaderText="Book Title" SortExpression="booktitle" />
-                                <asp:BoundField DataField="copynum" HeaderText="Copy Number" SortExpression="copynum" />
-                                <asp:BoundField DataField="status" HeaderText="Status" SortExpression="status" />
-                                <asp:BoundField DataField="numberofdaysallowed" HeaderText="Number of Days Allowed" SortExpression="numberofdaysallowed" />
-                                <asp:CommandField ShowEditButton="true" ShowDeleteButton="true" />
-                            </Columns>
-                        </asp:GridView>
-                    </div>
+                <div class="box">
+                    <h3>Edit Book</h3>
+                    <asp:GridView ID="BookGridView" runat="server" AutoGenerateColumns="False"
+                        DataKeyNames="bookid"
+                        OnRowEditing="BookGridView_RowEditing"
+                        OnRowCancelingEdit="BookGridView_RowCancelingEdit"
+                        OnRowUpdating="BookGridView_RowUpdating">    
+                        <Columns>
+                            <asp:TemplateField HeaderText="Book Category" ItemStyle-Width="130">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" Text='<%# Eval("bookcategory") %>'></asp:Label>
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="TextBoxBookCategory" runat="server" Text='<%# Bind("bookcategory") %>'></asp:TextBox>
+                                </EditItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Book Category Detail" ItemStyle-Width="300">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" Text='<%# Eval("bookcatdetail") %>'></asp:Label>
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="TextBoxBookCategoryDetail" runat="server" Text='<%# Bind("bookcatdetail") %>'></asp:TextBox>
+                                </EditItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Book ID" ItemStyle-Width="200">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" Text='<%# Eval("bookid") %>'></asp:Label>
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="TextBoxBookBookId" runat="server" Text='<%# Bind("bookid") %>'></asp:TextBox>
+                                </EditItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Book Title" ItemStyle-Width="300">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" Text='<%# Eval("booktitle") %>'></asp:Label>
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="TextBoxBookTitle" runat="server" Text='<%# Bind("booktitle") %>'></asp:TextBox>
+                                </EditItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Copy Number" ItemStyle-Width="100">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" Text='<%# Eval("copynum") %>'></asp:Label>
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="TextBoxCopyNumber" runat="server" Text='<%# Bind("copynum") %>'></asp:TextBox>
+                                </EditItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Status" ItemStyle-Width="80">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" Text='<%# Eval("status") %>'></asp:Label>
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="TextBoxStatus" runat="server" Text='<%# Bind("status") %>'></asp:TextBox>
+                                </EditItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Number of Days Allowed" ItemStyle-Width="230">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" Text='<%# Eval("numberofdaysallowed") %>'></asp:Label>
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="TextBoxNumberOfDaysAllowed" runat="server" Text='<%# Bind("numberofdaysallowed") %>'></asp:TextBox>
+                                </EditItemTemplate>
+                            </asp:TemplateField>
+                            <asp:CommandField ShowEditButton="True" ItemStyle-Width="50"/>
+                        </Columns>
+                    </asp:GridView>
+                    <asp:Label ID="lblEditBookError" runat="server" CssClass="error-message"></asp:Label>
+                </div>
 
-                    <div class="box">
-                        <h3>Delete Book</h3>
-                        <div>
-                            <label for="DeleteBookId">Book ID:</label>
-                            <asp:TextBox CssClass="asptextbox" ID="DeleteBookId" runat="server"></asp:TextBox>
-                        </div>
-                        <div>
-                            <asp:Button CssClass="aspbutton" ID="DeleteBookButton" runat="server" Text="Delete Book" OnClick="DeleteBookButton_Click" />
-                        </div>
-                        <div>
-                            <asp:Label CssClass="asplabel" ID="DeleteBookConfirmation" runat="server"></asp:Label>
-                        </div>
+                <div class="box">
+                    <h3>Delete Book</h3>
+                    <div>
+                        <label for="DeleteBookId">Book ID:</label>
+                        <asp:TextBox CssClass="asptextbox" ID="DeleteBookId" runat="server"></asp:TextBox>
+                        <asp:Label ID="lblDeleteBookError" runat="server" CssClass="error-message"></asp:Label>
                     </div>
-                </form>
-            </div>            
-    </div>           
+                    <div>
+                        <asp:Button CssClass="aspbutton" ID="DeleteBookButton" runat="server" Text="Delete Book" OnClick="DeleteBookButton_Click" />
+                    </div>
+                    <div>
+                        <asp:Label CssClass="asplabel" ID="DeleteBookConfirmation" runat="server"></asp:Label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

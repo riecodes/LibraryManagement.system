@@ -111,7 +111,6 @@
     <Content Include="Models\css\default.css" />
     <Content Include="Models\css\managepatrons.css" />
     <Content Include="Models\css\managetransactions.css" />
-    <Content Include="Models\AddBook.aspx" />
     <Content Include="Models\css\returnbooks.css" />
     <Content Include="Models\Default.aspx" />
     <Content Include="Models\ManagePatrons.aspx" />
@@ -121,13 +120,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\AddBook.aspx.cs">
-      <DependentUpon>AddBook.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Models\AddBook.aspx.designer.cs">
-      <DependentUpon>AddBook.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Models\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

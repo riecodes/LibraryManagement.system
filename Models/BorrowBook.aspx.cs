@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data;
 using MySql.Data.MySqlClient;
+using System.Web.UI.WebControls;
 
 namespace LibraryManagement.system
 {
@@ -35,12 +36,23 @@ namespace LibraryManagement.system
             {
                 if (ValidateBorrower(borrowerId))
                 {
+                    if (!ValidateBookExistence(bookId))
+                    {
+                        ErrorMessageLabel.Text = "Book is not available for borrowing.";
+                        SuccessMessageLabel.Text = "";
+                        return;
+                    }
                     if (ValidateBookAvailability(bookId))
                     {
                         // Check if the borrower already has maximum allowed books borrowed on the same day
                         if (HasMaximumBooksBorrowedOnSameDay(borrowerId))
                         {
                             ErrorMessageLabel.Text = "The maximum number of books allowed to borrow on the same day has been reached.";
+                            SuccessMessageLabel.Text = "";
+                        }
+                        if (HasNoBooksAllowed(borrowerId))
+                        {
+                            ErrorMessageLabel.Text = "You have reached the maximum number of books allowed to borrow.";
                             SuccessMessageLabel.Text = "";
                         }
                         else
@@ -53,7 +65,7 @@ namespace LibraryManagement.system
 
                             // Generate transaction details
                             string transactionId = GenerateTransactionId("B-DATE-");
-                            string transactionCatId = GetBookCategory(bookId);
+                            string transactionCatId = GetBookId(bookId);
                             string transactionCatDetail = "BORROW";
                             DateTime transactionDate = DateTime.Now;
 
@@ -95,6 +107,28 @@ namespace LibraryManagement.system
             }
         }
 
+        private bool ValidateBookExistence(string bookId)
+        {
+            if (string.IsNullOrEmpty(bookId))
+            {
+                return false; // Return false if bookId is null or empty
+            }
+
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            string query = "SELECT COUNT(*) FROM bookinfo WHERE bookid = @BookId";
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@BookId", bookId);
+                    connection.Open(); // Open the connection before executing the query
+                    int count = Convert.ToInt32(command.ExecuteScalar());
+                    return count > 0;
+                }
+            }
+        }
+
+
         private bool ValidateBookAvailability(string bookId)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
@@ -107,6 +141,22 @@ namespace LibraryManagement.system
                     connection.Open();
                     string status = Convert.ToString(command.ExecuteScalar());
                     return status == "IN";
+                }
+            }
+        }
+
+        private bool HasNoBooksAllowed(string borrowerId)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            string query = "SELECT numberofbooksallowed FROM borrowerinfo WHERE borrowerid = @BorrowerId";
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@BorrowerId", borrowerId);
+                    connection.Open();
+                    int numberOfBooksAllowed = Convert.ToInt32(command.ExecuteScalar());
+                    return numberOfBooksAllowed == 0;
                 }
             }
         }
@@ -128,21 +178,22 @@ namespace LibraryManagement.system
             }
         }
 
-        private string GetBookCategory(string bookId)
+        private string GetBookId(string bookId)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
-            string query = "SELECT category FROM bookinfo WHERE bookid = @BookId";
+            string query = "SELECT bookid FROM bookinfo WHERE bookid = @BookId";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@BookId", bookId);
                     connection.Open();
-                    string category = Convert.ToString(command.ExecuteScalar());
-                    return category;
+                    string bookid = Convert.ToString(command.ExecuteScalar());
+                    return bookid;
                 }
             }
         }
+
 
         private void UpdateBookStatus(string bookId, string status)
         {
@@ -178,12 +229,12 @@ namespace LibraryManagement.system
         private string GenerateTransactionId(string prefix)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
-            string query = "SELECT COUNT(*) FROM transactioninfo WHERE transid LIKE @Prefix + '%' AND transdate = @TransactionDate";
+            string query = "SELECT COUNT(*) FROM transactioninfo WHERE transid LIKE @Prefix AND transdate = @TransactionDate";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Prefix", prefix);
+                    command.Parameters.AddWithValue("@Prefix", prefix + '%');
                     command.Parameters.AddWithValue("@TransactionDate", DateTime.Today);
                     connection.Open();
                     int count = Convert.ToInt32(command.ExecuteScalar());
@@ -192,6 +243,7 @@ namespace LibraryManagement.system
                 }
             }
         }
+
 
         private void InsertTransactionRecord(string transactionId, string transactionCatId, string transactionCatDetail, string borrowerId, string bookId, DateTime transactionDate)
         {

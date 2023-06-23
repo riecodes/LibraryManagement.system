@@ -16,59 +16,56 @@ namespace LibraryManagement.system
             {
                 ErrorMessageLabel.Text = "Please enter the borrower ID and book ID.";
                 SuccessMessageLabel.Text = "";
+                return;
             }
-            else
+
+            try
             {
-                try
+                string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
-                    using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString))
+                    connection.Open();
+
+                    if (!ValidateBorrower(connection, borrowerId))
                     {
-                        connection.Open();
-
-                        // Check if borrower exists
-                        if (ValidateBorrower(connection, borrowerId))
-                        {
-                            // Check if book return is valid
-                            if (ValidateBookReturn(connection, bookId))
-                            {
-                                // Update book status to "IN" in the database
-                                UpdateBookStatus(connection, bookId, "IN");
-
-                                // Increment the borrower's numberofbooksallowed by 1
-                                IncrementNumberOfBooksAllowed(connection, borrowerId);
-
-                                // Generate transaction details
-                                string transactionId = GenerateTransactionId("R-DATE-");
-                                string transactionCatId = GetBookCategory(connection, bookId);
-                                string transactionCatDetail = "RETURN";
-                                DateTime transactionDate = DateTime.Now;
-
-                                // Insert the transaction record into the database
-                                InsertTransactionRecord(connection, transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
-
-                                // Display success message
-                                SuccessMessageLabel.Text = "Book returned successfully.";
-                                ErrorMessageLabel.Text = "";
-                            }
-                            else
-                            {
-                                ErrorMessageLabel.Text = "Invalid book ID or the book is already returned.";
-                                SuccessMessageLabel.Text = "";
-                            }
-                        }
-                        else
-                        {
-                            ErrorMessageLabel.Text = "Borrower ID not found.";
-                            SuccessMessageLabel.Text = "";
-                        }
+                        ErrorMessageLabel.Text = "Borrower ID not found or invalid.";
+                        SuccessMessageLabel.Text = "";
+                        return;
                     }
+
+                    if (!ValidateBookReturn(connection, bookId))
+                    {
+                        ErrorMessageLabel.Text = "Invalid book ID or the book is already returned.";
+                        SuccessMessageLabel.Text = "";
+                        return;
+                    }
+
+                    // Update book status to "IN" in the database
+                    UpdateBookStatus(connection, bookId, "IN");
+
+                    // Increment the borrower's numberofbooksallowed by 1
+                    IncrementNumberOfBooksAllowed(connection, borrowerId);
+
+                    // Generate transaction details
+                    string transactionId = GenerateTransactionId("R-DATE-");
+                    string transactionCatId = GetBookCategory(connection, bookId);
+                    string transactionCatDetail = "RETURN";
+                    DateTime transactionDate = DateTime.Now;
+
+                    // Insert the transaction record into the database
+                    InsertTransactionRecord(connection, transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
+
+                    // Display success message
+                    SuccessMessageLabel.Text = "Book returned successfully.";
+                    ErrorMessageLabel.Text = "";
                 }
-                catch (Exception)
-                {
-                    ErrorMessageLabel.Text = "An error occurred while processing the request. Please try again later.";
-                    SuccessMessageLabel.Text = "";
-                    // Log the exception or perform additional error handling if needed
-                }
+            }
+            catch (Exception)
+            {
+                ErrorMessageLabel.Text = "An error occurred while processing the request. Please try again later.";
+                SuccessMessageLabel.Text = "";
+                // Log the exception or perform additional error handling if needed
             }
         }
 
@@ -135,7 +132,7 @@ namespace LibraryManagement.system
 
         private string GetBookCategory(MySqlConnection connection, string bookId)
         {
-            string query = "SELECT category FROM bookinfo WHERE bookid = @BookId";
+            string query = "SELECT bookcategory FROM bookinfo WHERE bookid = @BookId";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@BookId", bookId);
@@ -145,7 +142,7 @@ namespace LibraryManagement.system
 
         private void InsertTransactionRecord(MySqlConnection connection, string transactionId, string transactionCatId, string transactionCatDetail, string borrowerId, string bookId, DateTime transactionDate)
         {
-            string query = "INSERT INTO transactioninfo (transactionid, transactioncatid, transactioncatdetail, borrowerid, bookid, transactiondate) " +
+            string query = "INSERT INTO transactioninfo (transid, transcatid, transcatdetail, borrowerid, bookid, transdate) " +
                            "VALUES (@TransactionId, @TransactionCatId, @TransactionCatDetail, @BorrowerId, @BookId, @TransactionDate)";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
