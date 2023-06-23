@@ -72,8 +72,12 @@ namespace LibraryManagement.system
                             // Insert the transaction record into the database
                             InsertTransactionRecord(transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
 
+                            // Clear the input fields
+                            BorrowerIdTextBox.Text = "";
+                            BookIdTextBox.Text = "";
+
                             // Display success message
-                            SuccessMessageLabel.Text = "Book borrowed successfully.";
+                            SuccessMessageLabel.Text = "Book returned successfully.";
                             ErrorMessageLabel.Text = "";
                         }
                     }

@@ -37,8 +37,8 @@
                         <input class="asptextbox" type="text" id="BookIdTextBox" runat="server" />
                     </div>
                     <div class="form-group">
-                        <asp:Label ID="ErrorMessageLabel" runat="server" CssClass="error-message"></asp:Label>
-                        <asp:Label ID="SuccessMessageLabel" runat="server" CssClass="success-message"></asp:Label>
+                        <asp:Label ID="ErrorMessageLabel" runat="server" CssClass="error-message" ForeColor="Red"></asp:Label>
+                        <asp:Label ID="SuccessMessageLabel" runat="server" CssClass="success-message" ForeColor="Green"></asp:Label>
                     </div>
                     <div class="form-group">
                         <asp:Button ID="ReturnButton" runat="server" Text="Return" OnClick="ReturnButton_Click"/>

@@ -56,14 +56,18 @@ namespace LibraryManagement.system
                     // Insert the transaction record into the database
                     InsertTransactionRecord(connection, transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
 
+                    // Clear the input fields
+                    BorrowerIdTextBox.Value = "";
+                    BookIdTextBox.Value = "";
+
                     // Display success message
                     SuccessMessageLabel.Text = "Book returned successfully.";
                     ErrorMessageLabel.Text = "";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ErrorMessageLabel.Text = "An error occurred while processing the request. Please try again later.";
+                ErrorMessageLabel.Text = "An error occurred while processing the request. Error: " + ex.Message;
                 SuccessMessageLabel.Text = "";
                 // Log the exception or perform additional error handling if needed
             }
@@ -115,13 +119,12 @@ namespace LibraryManagement.system
         private string GenerateTransactionId(string prefix)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
-            string query = "SELECT COUNT(*) FROM transactioninfo WHERE transid LIKE @Prefix + '%' AND transdate = @TransactionDate";
+            string query = "SELECT COUNT(*) FROM transactioninfo WHERE transid LIKE @Prefix AND transdate = CURDATE()";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Prefix", prefix);
-                    command.Parameters.AddWithValue("@TransactionDate", DateTime.Today);
+                    command.Parameters.AddWithValue("@Prefix", prefix + "%");
                     connection.Open();
                     int count = Convert.ToInt32(command.ExecuteScalar());
                     string transactionId = prefix + DateTime.Now.ToString("yyyyMMdd") + "-" + (count + 1).ToString("D3");
