@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Borrow Book</title>
-    <link rel="stylesheet" href="css/borrowbook.css" />
+    <link rel="stylesheet" href="css/borrowbooks.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin-=""/>
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Montserrat&family=Roboto&display=swap" rel="stylesheet"/>
@@ -26,34 +26,29 @@
             </ul>
         </div>
         <hr class="vertical-line"/>
-        <!--NAVBAR END-->
-        <div class="container">            
+        <!--NAVBAR END-->          
             <div class="content">
-                <form id="form" runat="server">
-                    <div>
+                <form id="form2" runat="server">
+                    <div class="box">
                         <h2>Borrow Book</h2>
                         <div>
                             <label>Borrower ID:</label>
-                            <asp:TextBox ID="BorrowerIdTextBox" runat="server"></asp:TextBox>
+                            <asp:TextBox CssClass="asptextbox" ID="BorrowerIdTextBox" runat="server"></asp:TextBox>
                         </div>
                         <div>
                             <label>Book ID:</label>
-                            <asp:TextBox ID="BookIdTextBox" runat="server"></asp:TextBox>
+                            <asp:TextBox CssClass="asptextbox" ID="BookIdTextBox" runat="server"></asp:TextBox>
                         </div>
                         <div>
-                            <asp:Button ID="BorrowButton" runat="server" Text="Borrow" OnClick="BorrowButton_Click" />
+                            <asp:Button CssClass="aspbutton" ID="BorrowButton" runat="server" Text="Borrow" OnClick="BorrowButton_Click" />
                         </div>
                         <div>
-                            <asp:Label ID="ErrorMessageLabel" runat="server" ForeColor="Red"></asp:Label>
-                            <asp:Label ID="SuccessMessageLabel" runat="server" ForeColor="Green"></asp:Label>
+                            <asp:Label CssClass="asplabel" ID="ErrorMessageLabel" runat="server" ForeColor="Red"></asp:Label>
+                            <asp:Label CssClass="asplabel" ID="SuccessMessageLabel" runat="server" ForeColor="Green"></asp:Label>
                         </div>
                     </div>
                 </form>
             </div>            
         </div>
-    </div>   
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,15 +1,9 @@
-* {
+﻿* {
     margin: 0;
     padding: 0;
     font-family: 'Montserrat', sans-serif;
 }
 
-body {
-}
-
-.container {
-    display: flex;
-}
 /*NAVBAR START*/
 
 .navbar {
@@ -50,3 +44,29 @@ body {
     border-left: 1px groove #333;
 }
 /*NAVBAR END*/
+
+body {
+    background-color: darkolivegreen
+}
+
+.container {
+    display: flex;
+}
+
+.content {
+    display: block;
+    width: 100%;
+    padding: 50px 50px 0px 50px;
+}
+
+.box {
+    font-size: 25px;
+    border-radius: 25px;
+    background-color: darkkhaki;
+    padding: 30px 0px 30px 50px;
+    margin-bottom: 10px;
+}
+
+.form-group {
+
+}

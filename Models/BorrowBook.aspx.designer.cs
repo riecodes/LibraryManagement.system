@@ -15,7 +15,7 @@ namespace LibraryManagement.system
     {
 
         /// <summary>
-        /// form control.
+        /// form2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.

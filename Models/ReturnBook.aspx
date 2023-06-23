@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Return Book</title>
-    <link rel="stylesheet" href="css/returnbook.css"/>
+    <link rel="stylesheet" href="css/borrowbooks.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Montserrat&family=Roboto&display=swap" rel="stylesheet"/>
@@ -26,16 +26,16 @@
         <hr class="vertical-line"/>
         <!--NAVBAR END-->
         <div class="content">
-            <form id="form" runat="server">
-                <div>
+            <form id="form5" runat="server">
+                <div class="box">
                     <h2>Return Book</h2>
                     <div class="form-group">
                         <label for="BorrowerIdTextBox">Borrower ID:</label>
-                        <input type="text" id="BorrowerIdTextBox" runat="server" />
+                        <input class="asptextbox" type="text" id="BorrowerIdTextBox" runat="server" />
                     </div>
                     <div class="form-group">
                         <label for="BookIdTextBox">Book ID:</label>
-                        <input type="text" id="BookIdTextBox" runat="server" />
+                        <input class="asptextbox" type="text" id="BookIdTextBox" runat="server" />
                     </div>
                     <div class="form-group">
                         <asp:Label ID="ErrorMessageLabel" runat="server" CssClass="error-message"></asp:Label>
@@ -48,6 +48,5 @@
             </form>  
         </div>
     </div>
-    
 </body>
 </html>

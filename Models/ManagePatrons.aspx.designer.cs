@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LibraryManagement.system
+namespace LibraryManagement.system.Models
 {
 
 
@@ -15,273 +15,174 @@ namespace LibraryManagement.system
     {
 
         /// <summary>
-        /// form control.
+        /// form3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form;
+        protected global::System.Web.UI.HtmlControls.HtmlForm form3;
 
         /// <summary>
-        /// AddName control.
+        /// AddPatronName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText AddName;
+        protected global::System.Web.UI.WebControls.TextBox AddPatronName;
 
         /// <summary>
-        /// AddCourse control.
+        /// AddPatronCourse control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText AddCourse;
+        protected global::System.Web.UI.WebControls.TextBox AddPatronCourse;
 
         /// <summary>
-        /// AddSection control.
+        /// AddPatronSection control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText AddSection;
+        protected global::System.Web.UI.WebControls.TextBox AddPatronSection;
 
         /// <summary>
-        /// AddNumberOfBooksAllowed control.
+        /// AddPatronButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText AddNumberOfBooksAllowed;
+        protected global::System.Web.UI.WebControls.Button AddPatronButton;
 
         /// <summary>
-        /// AddButton control.
+        /// AddPatronConfirmation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button AddButton;
+        protected global::System.Web.UI.WebControls.Label AddPatronConfirmation;
 
         /// <summary>
-        /// EditBorrowerId control.
+        /// SearchPatronName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText EditBorrowerId;
+        protected global::System.Web.UI.WebControls.TextBox SearchPatronName;
 
         /// <summary>
-        /// editSection control.
+        /// SearchPatronButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl editSection;
+        protected global::System.Web.UI.WebControls.Button SearchPatronButton;
 
         /// <summary>
-        /// EditName control.
+        /// SearchPatronGridView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText EditName;
+        protected global::System.Web.UI.WebControls.GridView SearchPatronGridView;
 
         /// <summary>
-        /// EditCourse control.
+        /// SearchPatronResults control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText EditCourse;
+        protected global::System.Web.UI.WebControls.Label SearchPatronResults;
 
         /// <summary>
-        /// Text1 control.
+        /// EditPatronId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText Text1;
+        protected global::System.Web.UI.WebControls.TextBox EditPatronId;
 
         /// <summary>
-        /// EditNumberOfBooksAllowed control.
+        /// EditPatronName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText EditNumberOfBooksAllowed;
+        protected global::System.Web.UI.WebControls.TextBox EditPatronName;
 
         /// <summary>
-        /// EditButton control.
+        /// EditPatronCourse control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button EditButton;
+        protected global::System.Web.UI.WebControls.TextBox EditPatronCourse;
 
         /// <summary>
-        /// DeleteBorrowerId control.
+        /// EditPatronSection control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText DeleteBorrowerId;
+        protected global::System.Web.UI.WebControls.TextBox EditPatronSection;
 
         /// <summary>
-        /// deleteSection control.
+        /// EditPatronButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl deleteSection;
+        protected global::System.Web.UI.WebControls.Button EditPatronButton;
 
         /// <summary>
-        /// DeleteName control.
+        /// EditPatronConfirmation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText DeleteName;
+        protected global::System.Web.UI.WebControls.Label EditPatronConfirmation;
 
         /// <summary>
-        /// DeleteCourse control.
+        /// DeletePatronId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText DeleteCourse;
+        protected global::System.Web.UI.WebControls.TextBox DeletePatronId;
 
         /// <summary>
-        /// Text2 control.
+        /// DeletePatronButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText Text2;
+        protected global::System.Web.UI.WebControls.Button DeletePatronButton;
 
         /// <summary>
-        /// DeleteNumberOfBooksAllowed control.
+        /// DeletePatronConfirmation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText DeleteNumberOfBooksAllowed;
-
-        /// <summary>
-        /// DeleteButton control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button DeleteButton;
-
-        /// <summary>
-        /// deleteConfirmation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl deleteConfirmation;
-
-        /// <summary>
-        /// DeleteConfirmationLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label DeleteConfirmationLabel;
-
-        /// <summary>
-        /// ConfirmDeleteButton control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ConfirmDeleteButton;
-
-        /// <summary>
-        /// SearchBorrowerId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText SearchBorrowerId;
-
-        /// <summary>
-        /// searchResults control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl searchResults;
-
-        /// <summary>
-        /// SearchName control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText SearchName;
-
-        /// <summary>
-        /// SearchCourse control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText SearchCourse;
-
-        /// <summary>
-        /// SearchSection control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText SearchSection;
-
-        /// <summary>
-        /// SearchNumberOfBooksAllowed control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText SearchNumberOfBooksAllowed;
-
-        /// <summary>
-        /// SearchButton control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button SearchButton;
+        protected global::System.Web.UI.WebControls.Label DeletePatronConfirmation;
     }
 }

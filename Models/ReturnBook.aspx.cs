@@ -117,8 +117,20 @@ namespace LibraryManagement.system
 
         private string GenerateTransactionId(string prefix)
         {
-            // TODO: Implement transaction ID generation logic
-            return "";
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            string query = "SELECT COUNT(*) FROM transactioninfo WHERE transid LIKE @Prefix + '%' AND transdate = @TransactionDate";
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Prefix", prefix);
+                    command.Parameters.AddWithValue("@TransactionDate", DateTime.Today);
+                    connection.Open();
+                    int count = Convert.ToInt32(command.ExecuteScalar());
+                    string transactionId = prefix + DateTime.Now.ToString("yyyyMMdd") + "-" + (count + 1).ToString("D3");
+                    return transactionId;
+                }
+            }
         }
 
         private string GetBookCategory(MySqlConnection connection, string bookId)
