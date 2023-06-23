@@ -191,6 +191,11 @@ namespace LibraryManagement.system.Models
         protected void EditPatronGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
             int rowIndex = e.RowIndex;
+
+            // Check if the DataKeys collection has any items
+            if (EditPatronGridView.DataKeys.Count > 0)
+            {
+            // Retrieve the borrowerid value from the DataKeys collection
             string borrowerId = EditPatronGridView.DataKeys[rowIndex].Values["borrowerid"].ToString();
             TextBox txtPatronName = EditPatronGridView.Rows[rowIndex].FindControl("txtPatronName") as TextBox;
             TextBox txtPatronCourse = EditPatronGridView.Rows[rowIndex].FindControl("txtPatronCourse") as TextBox;

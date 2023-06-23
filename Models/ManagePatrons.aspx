@@ -67,7 +67,7 @@
 
                 <div class="box">
                     <h3>Edit Borrower</h3>
-                    <asp:GridView CssClass="aspgridview" ID="EditPatronGridView" runat="server" OnRowEditing="EditPatronGridView_RowEditing" OnRowCancelingEdit="EditPatronGridView_RowCancelingEdit" OnRowUpdating="EditPatronGridView_RowUpdating" AutoGenerateColumns="false">
+                    <asp:GridView DataKeyNames="borrowerid" CssClass="aspgridview" ID="EditPatronGridView" runat="server" OnRowEditing="EditPatronGridView_RowEditing" OnRowCancelingEdit="EditPatronGridView_RowCancelingEdit" OnRowUpdating="EditPatronGridView_RowUpdating" AutoGenerateColumns="false">
                         <Columns>
                             <asp:TemplateField HeaderText="Borrower ID" ItemStyle-Width="200">
                                 <ItemTemplate>
