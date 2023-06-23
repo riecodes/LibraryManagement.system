@@ -186,9 +186,6 @@ namespace LibraryManagement.system.Models
             }
         }
 
-
-
-
         protected void BindGrid()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;

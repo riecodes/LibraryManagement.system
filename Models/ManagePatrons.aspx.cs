@@ -59,6 +59,7 @@ namespace LibraryManagement.system.Models
                         // Display a success message
                         AddPatronConfirmation.Text = "Patron added successfully. Your Borrower ID: <strong>" + borrowerId + "</strong>";
                         AddPatronConfirmation.CssClass = "success-message";
+                        LoadPatronData();
                     }
                     else
                     {
@@ -186,28 +187,27 @@ namespace LibraryManagement.system.Models
             EditPatronGridView.EditIndex = -1;
             LoadPatronData();
         }
+
         protected void EditPatronGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
-            GridViewRow row = EditPatronGridView.Rows[e.RowIndex];
-            string patronId = ((Label)row.FindControl("lblEditPatronId")).Text;
-            string patronName = ((TextBox)row.FindControl("txtPatronName")).Text;
-            string patronCourse = ((TextBox)row.FindControl("txtPatronCourse")).Text;
-            string patronSection = ((TextBox)row.FindControl("txtPatronSection")).Text;
-            string patronBooksAllowed = ((TextBox)row.FindControl("txtPatronBooksAllowed")).Text;
+            int rowIndex = e.RowIndex;
+            string borrowerId = EditPatronGridView.DataKeys[rowIndex].Values["borrowerid"].ToString();
+            TextBox txtPatronName = EditPatronGridView.Rows[rowIndex].FindControl("txtPatronName") as TextBox;
+            TextBox txtPatronCourse = EditPatronGridView.Rows[rowIndex].FindControl("txtPatronCourse") as TextBox;
+            TextBox txtPatronSection = EditPatronGridView.Rows[rowIndex].FindControl("txtPatronSection") as TextBox;
 
-            // Update the patron information in the database
-            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            string connectionString = "LibraryManagementSystemConnectionString";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                string query = "UPDATE borrowerinfo SET borrowerName = @Name, course = @Course, section = @Section, numberofbooksallowed = @BooksAllowed WHERE borrowerid = @Id";
+                connection.Open();
+                string query = "UPDATE borrowerinfo SET borrowerName = @Name, course = @Course, section = @Section WHERE borrowerid = @BorrowerID";
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Name", patronName);
-                    command.Parameters.AddWithValue("@Course", patronCourse);
-                    command.Parameters.AddWithValue("@Section", patronSection);
-                    command.Parameters.AddWithValue("@BooksAllowed", patronBooksAllowed);
-                    command.Parameters.AddWithValue("@Id", patronId);
-                    connection.Open();
+                    command.Parameters.AddWithValue("@Name", txtPatronName.Text);
+                    command.Parameters.AddWithValue("@Course", txtPatronCourse.Text);
+                    command.Parameters.AddWithValue("@Section", txtPatronSection.Text);
+                    command.Parameters.AddWithValue("@BorrowerID", borrowerId);
+
                     int rowsAffected = command.ExecuteNonQuery();
                     if (rowsAffected > 0)
                     {
@@ -225,7 +225,6 @@ namespace LibraryManagement.system.Models
             EditPatronGridView.EditIndex = -1;
             LoadPatronData();
         }
-       
 
         protected void LoadPatronData()
         {

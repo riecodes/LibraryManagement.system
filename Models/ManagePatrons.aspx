@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ManagePatrons.aspx.cs" Inherits="LibraryManagement.system.Models.ManagePatrons" MaintainScrollPositionOnPostBack="true"%>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ManagePatrons.aspx.cs" Inherits="LibraryManagement.system.Models.ManagePatrons" %>
 
 <!DOCTYPE html>
 
@@ -122,7 +122,7 @@
                         <asp:TextBox CssClass="asptextbox" ID="DeletePatronId" runat="server"></asp:TextBox>
                     </div>
                     <div>
-                        <asp:Button CssClass="aspbutton" ID="DeletePatronButton" runat="server" Text="Delete Patron" />
+                        <asp:Button CssClass="aspbutton" ID="DeletePatronButton" runat="server" Text="Delete Patron" OnClick="DeletePatronButton_Click" />
                     </div>
                     <div>
                         <asp:Label CssClass="asplabel" ID="DeletePatronConfirmation" runat="server"></asp:Label>

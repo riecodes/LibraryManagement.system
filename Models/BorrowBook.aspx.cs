@@ -49,37 +49,37 @@ namespace LibraryManagement.system
                         {
                             ErrorMessageLabel.Text = "The maximum number of books allowed to borrow on the same day has been reached.";
                             SuccessMessageLabel.Text = "";
+                            return;
                         }
                         if (HasNoBooksAllowed(borrowerId))
                         {
                             ErrorMessageLabel.Text = "You have reached the maximum number of books allowed to borrow.";
                             SuccessMessageLabel.Text = "";
+                            return;
                         }
-                        else
-                        {
-                            // Update book status to "OUT" in the database
-                            UpdateBookStatus(bookId, "OUT");
 
-                            // Decrement the borrower's numberofbooksallowed by 1
-                            DecrementNumberOfBooksAllowed(borrowerId);
+                        // Update book status to "OUT" in the database
+                        UpdateBookStatus(bookId, "OUT");
 
-                            // Generate transaction details
-                            string transactionId = GenerateTransactionId("B-DATE-");
-                            string transactionCatId = GetBookId(bookId);
-                            string transactionCatDetail = "BORROW";
-                            DateTime transactionDate = DateTime.Now;
+                        // Decrement the borrower's numberofbooksallowed by 1
+                        DecrementNumberOfBooksAllowed(borrowerId);
 
-                            // Insert the transaction record into the database
-                            InsertTransactionRecord(transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
+                        // Generate transaction details
+                        string transactionId = GenerateTransactionId("B-DATE-");
+                        string transactionCatId = GetBookId(bookId);
+                        string transactionCatDetail = "BORROW";
+                        DateTime transactionDate = DateTime.Now;
 
-                            // Clear the input fields
-                            BorrowerIdTextBox.Text = "";
-                            BookIdTextBox.Text = "";
+                        // Insert the transaction record into the database
+                        InsertTransactionRecord(transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
 
-                            // Display success message
-                            SuccessMessageLabel.Text = "Book returned successfully.";
-                            ErrorMessageLabel.Text = "";
-                        }
+                        // Clear the input fields
+                        BorrowerIdTextBox.Text = "";
+                        BookIdTextBox.Text = "";
+
+                        // Display success message
+                        SuccessMessageLabel.Text = "Book borrowed successfully.";
+                        ErrorMessageLabel.Text = "";
                     }
                     else
                     {

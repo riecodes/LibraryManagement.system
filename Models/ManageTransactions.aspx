@@ -26,14 +26,9 @@
         <!--NAVBAR END-->
         <div class="content">
             <form id="form" runat="server">
-        
+            
             </form>
         </div>
     </div>
-    <script>
-        function preventScrollToTop(event) {
-            event.preventDefault();
-        }
-    </script>
 </body>
 </html>
