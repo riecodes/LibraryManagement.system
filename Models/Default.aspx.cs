@@ -1,7 +1,7 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Configuration;
 using System.Data;
-using MySql.Data.MySqlClient;
 using System.Web.UI.WebControls;
 
 namespace LibraryManagement.system.Models
@@ -14,7 +14,7 @@ namespace LibraryManagement.system.Models
             {
                 ClearInputFields();
                 BindBookGrid();
-            }             
+            }
         }
 
         protected void BtnAddBook_Click(object sender, EventArgs e)
@@ -114,8 +114,8 @@ namespace LibraryManagement.system.Models
                         int rowsAffected = insertCmd.ExecuteNonQuery();
 
                         if (rowsAffected > 0)
-                        {                            
-                            lblAddBookError.Text = "Book added successfully.";                             
+                        {
+                            lblAddBookError.Text = "Book added successfully.";
                             BindBookGrid();
                         }
                         else
@@ -147,8 +147,8 @@ namespace LibraryManagement.system.Models
             // Set the default value for Number of Days Allowed
             txtNumberOfDaysAllowed.Value = "3";
 
-            
-            
+
+
         }
 
         private string GenerateBookId(string bookCategory, int copyNumber, MySqlConnection con)

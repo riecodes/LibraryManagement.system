@@ -110,11 +110,11 @@
     <Content Include="Models\css\borrowbooks.css" />
     <Content Include="Models\css\default.css" />
     <Content Include="Models\css\managepatrons.css" />
-    <Content Include="Models\css\managetransactions.css" />
+    <Content Include="Models\css\managetransactions_New.css" />
     <Content Include="Models\css\returnbooks.css" />
     <Content Include="Models\Default.aspx" />
     <Content Include="Models\ManageBorrowers.aspx" />
-    <Content Include="Models\ManageTransact.aspx" />
+    <Content Include="Models\ManageTransactions_New.aspx" />
     <Content Include="Models\ReturnBook.aspx" />
     <Content Include="Models\BorrowBook.aspx" />
     <Content Include="Web.config" />
@@ -134,12 +134,12 @@
     <Compile Include="Models\ManageBorrowers.aspx.designer.cs">
       <DependentUpon>ManageBorrowers.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Models\ManageTransact.aspx.cs">
-      <DependentUpon>ManageTransact.aspx</DependentUpon>
+    <Compile Include="Models\ManageTransactions_New.aspx.cs">
+      <DependentUpon>ManageTransactions_New.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Models\ManageTransact.aspx.designer.cs">
-      <DependentUpon>ManageTransact.aspx</DependentUpon>
+    <Compile Include="Models\ManageTransactions_New.aspx.designer.cs">
+      <DependentUpon>ManageTransactions_New.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\ReturnBook.aspx.cs">
       <DependentUpon>ReturnBook.aspx</DependentUpon>

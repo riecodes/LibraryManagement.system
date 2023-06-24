@@ -11,17 +11,17 @@ namespace LibraryManagement.system.Models
 {
 
 
-    public partial class ManageTransact
+    public partial class ManageTransactions_New
     {
 
         /// <summary>
-        /// form4 control.
+        /// form1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form4;
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
         /// TransactionGridView control.

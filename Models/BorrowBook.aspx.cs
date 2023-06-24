@@ -1,8 +1,6 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Configuration;
-using System.Data;
-using MySql.Data.MySqlClient;
-using System.Web.UI.WebControls;
 
 namespace LibraryManagement.system
 {
@@ -48,18 +46,18 @@ namespace LibraryManagement.system
                         ErrorMessageLabel.Text = "Book is not available for borrowing.";
                         SuccessMessageLabel.Text = "";
                         return;
-                    }                    
+                    }
 
                     if (ValidateBookAvailability(bookId))
                     {
-                        
+
                         // Check if the borrower already has maximum allowed books borrowed on the same day
                         if (HasMaximumBooksBorrowedOnSameDay(bookId))
                         {
                             ErrorMessageLabel.Text = "The maximum number of this book allowed to borrow on the same day has been reached.";
                             SuccessMessageLabel.Text = "";
                             return;
-                        }                        
+                        }
 
                         // Update book status to "OUT" in the database
                         UpdateBookStatus(bookId, "OUT");
