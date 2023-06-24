@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ManageTransactions.aspx.cs" Inherits="LibraryManagement.system.Models.ManageTransactions" MaintainScrollPositionOnPostBack="true"%>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ManageTransact.aspx.cs" Inherits="LibraryManagement.system.Models.ManageTransact" MaintainScrollPositionOnPostBack="true"%>
 
 <!DOCTYPE html>
 
@@ -19,7 +19,7 @@
                 <li><a href="BorrowBook.aspx"><p>Borrow Book</p></a></li>
                 <li><a href="ReturnBook.aspx"><p>Return Book</p></a></li>
                 <li><a href="ManageBorrowers.aspx"><p>Manage Borrowers</p></a></li>
-                <li><a href="ManageTransactions.aspx"><p>Manage Transactions</p></a></li>                
+                <li><a href="ManageTransact.aspx"><p>Manage Transactions</p></a></li>                
             </ul>
         </div>
         <hr class="vertical-line"/>
