@@ -203,6 +203,13 @@ namespace LibraryManagement.system
         {
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
             string query = "UPDATE bookinfo SET status = @Status WHERE bookid = @BookId";
+
+            // Check if the status is changing from "OUT" to "IN"
+            if (status == "IN")
+            {
+                query += "; DELETE FROM transactioninfo WHERE bookid = @BookId";
+            }
+
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 using (MySqlCommand command = new MySqlCommand(query, connection))
@@ -214,6 +221,7 @@ namespace LibraryManagement.system
                 }
             }
         }
+
 
         private void DecrementNumberOfBooksAllowed(string borrowerId)
         {
