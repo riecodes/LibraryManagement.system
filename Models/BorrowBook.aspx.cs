@@ -54,7 +54,7 @@ namespace LibraryManagement.system
                     return;
                 }
 
-                if (!ValidateBookExistence(bookId))
+                if (!ValidateBookAvailability(bookId))
                 {
                     ErrorMessageLabel.Text = "Book is not available for borrowing.";
                     SuccessMessageLabel.Text = "";
@@ -79,7 +79,7 @@ namespace LibraryManagement.system
                     DecrementNumberOfBooksAllowed(borrowerId);
 
                     // Generate transaction details
-                    string transactionId = GenerateTransactionId("B-DATE-");
+                    string transactionId = GenerateTransactionId("B-");
                     string transactionCatId = "BCAT001";
                     string transactionCatDetail = "BORROW";
                     DateTime transactionDate = DateTime.Now;
@@ -184,23 +184,6 @@ namespace LibraryManagement.system
                     connection.Open();
                     int count = Convert.ToInt32(command.ExecuteScalar());
                     return count >= 3; // Maximum 3 books allowed to borrow on the same day for each book category
-                }
-            }
-        }
-
-
-        private string GetBookId(string bookId)
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
-            string query = "SELECT bookid FROM bookinfo WHERE bookid = @BookId";
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                using (MySqlCommand command = new MySqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@BookId", bookId);
-                    connection.Open();
-                    string bookid = Convert.ToString(command.ExecuteScalar());
-                    return bookid;
                 }
             }
         }
