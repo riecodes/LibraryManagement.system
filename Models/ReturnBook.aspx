@@ -37,10 +37,10 @@
                         <input class="asptextbox" type="text" id="BookIdTextBox" runat="server" />
                     </div>
                     <div class="form-group">
-                        <asp:Label ID="ErrorMessageLabel" runat="server" CssClass="error-message" ForeColor="Red"></asp:Label>
-                        <asp:Label ID="ErrorMessageLabel2" runat="server" CssClass="error-message" ForeColor="Red"></asp:Label>
+                        <asp:Label ID="ErrorMessageLabel" runat="server" CssClass="error-message" ForeColor="Red"></asp:Label>                        
                         <asp:Label ID="SuccessMessageLabel" runat="server" CssClass="success-message" ForeColor="Green"></asp:Label>
                         <asp:Label ID="SuccessMessageLabel2" runat="server" CssClass="success-message" ForeColor="Green"></asp:Label>
+                        <asp:Label ID="SuccessMessageLabel3" runat="server" CssClass="success-message" ForeColor="Green"></asp:Label>
                     </div>
                     <div class="form-group">
                         <asp:Button ID="ReturnButton" runat="server" Text="Return" OnClick="ReturnButton_Click"/>

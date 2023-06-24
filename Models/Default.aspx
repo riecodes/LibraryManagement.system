@@ -27,7 +27,7 @@
         <div class="content">
         <div class="welcome">
             <h2>Welcome to Library Management System!</h2>
-            <h4>Kindly select the necessary tabs that suit your query :)</h4>
+            <h4>Kindly select the necessary tabs that suit your query:)</h4>
         </div>
             <form id="form" runat="server">
                 <div class="box">                    
