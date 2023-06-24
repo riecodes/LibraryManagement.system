@@ -19,16 +19,31 @@ namespace LibraryManagement.system
             {
                 ErrorMessageLabel.Text = "Please enter the borrower ID and book ID.";
                 SuccessMessageLabel.Text = "";
+                return;
             }
             else if (string.IsNullOrEmpty(borrowerId))
             {
                 ErrorMessageLabel.Text = "Please enter the borrower ID.";
                 SuccessMessageLabel.Text = "";
+                return;
             }
             else if (string.IsNullOrEmpty(bookId))
             {
                 ErrorMessageLabel.Text = "Please enter the book ID.";
                 SuccessMessageLabel.Text = "";
+                return;
+            }
+            if (!ValidateBorrower(borrowerId))
+            {
+                ErrorMessageLabel.Text = "Borrower ID does not exist.";
+                SuccessMessageLabel.Text = "";
+                return;
+            }
+            if (!ValidateBookExistence(bookId))
+            {
+                ErrorMessageLabel.Text = "Book ID does not exist.";
+                SuccessMessageLabel.Text = "";
+                return;
             }
             else
             {
@@ -39,60 +54,52 @@ namespace LibraryManagement.system
                     return;
                 }
 
-                if (ValidateBorrower(borrowerId))
+                if (!ValidateBookExistence(bookId))
                 {
-                    if (!ValidateBookExistence(bookId))
+                    ErrorMessageLabel.Text = "Book is not available for borrowing.";
+                    SuccessMessageLabel.Text = "";
+                    return;
+                }
+
+                if (ValidateBookAvailability(bookId))
+                {
+
+                    // Check if the borrower already has maximum allowed books borrowed on the same day
+                    if (HasMaximumBooksBorrowedOnSameDay(bookId))
                     {
-                        ErrorMessageLabel.Text = "Book is not available for borrowing.";
+                        ErrorMessageLabel.Text = "The maximum number of this book allowed to borrow on the same day has been reached.";
                         SuccessMessageLabel.Text = "";
                         return;
                     }
 
-                    if (ValidateBookAvailability(bookId))
-                    {
+                    // Update book status to "OUT" in the database
+                    UpdateBookStatus(bookId, "OUT");
 
-                        // Check if the borrower already has maximum allowed books borrowed on the same day
-                        if (HasMaximumBooksBorrowedOnSameDay(bookId))
-                        {
-                            ErrorMessageLabel.Text = "The maximum number of this book allowed to borrow on the same day has been reached.";
-                            SuccessMessageLabel.Text = "";
-                            return;
-                        }
+                    // Decrement the borrower's numberofbooksallowed by 1
+                    DecrementNumberOfBooksAllowed(borrowerId);
 
-                        // Update book status to "OUT" in the database
-                        UpdateBookStatus(bookId, "OUT");
+                    // Generate transaction details
+                    string transactionId = GenerateTransactionId("B-DATE-");
+                    string transactionCatId = "BCAT001";
+                    string transactionCatDetail = "BORROW";
+                    DateTime transactionDate = DateTime.Now;
 
-                        // Decrement the borrower's numberofbooksallowed by 1
-                        DecrementNumberOfBooksAllowed(borrowerId);
+                    // Insert the transaction record into the database
+                    InsertTransactionRecord(transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
 
-                        // Generate transaction details
-                        string transactionId = GenerateTransactionId("B-DATE-");
-                        string transactionCatId = "BCAT001";
-                        string transactionCatDetail = "BORROW";
-                        DateTime transactionDate = DateTime.Now;
+                    // Clear the input fields
+                    BorrowerIdTextBox.Text = "";
+                    BookIdTextBox.Text = "";
 
-                        // Insert the transaction record into the database
-                        InsertTransactionRecord(transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
-
-                        // Clear the input fields
-                        BorrowerIdTextBox.Text = "";
-                        BookIdTextBox.Text = "";
-
-                        // Display success message
-                        SuccessMessageLabel.Text = "Book borrowed successfully.";
-                        ErrorMessageLabel.Text = "";
-                    }
-                    else
-                    {
-                        ErrorMessageLabel.Text = "Book is not available for borrowing.";
-                        SuccessMessageLabel.Text = "";
-                    }
+                    // Display success message
+                    SuccessMessageLabel.Text = "Book borrowed successfully.";
+                    ErrorMessageLabel.Text = "";
                 }
                 else
                 {
-                    ErrorMessageLabel.Text = "Borrower ID not found.";
+                    ErrorMessageLabel.Text = "Book is not available for borrowing.";
                     SuccessMessageLabel.Text = "";
-                }
+                }                               
             }
         }
 
@@ -132,7 +139,6 @@ namespace LibraryManagement.system
                 }
             }
         }
-
 
         private bool ValidateBookAvailability(string bookId)
         {

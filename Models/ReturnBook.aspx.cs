@@ -28,7 +28,7 @@ namespace LibraryManagement.system
 
                     if (!ValidateBorrower(connection, borrowerId))
                     {
-                        ErrorMessageLabel.Text = "Borrower ID not found or invalid.";
+                        ErrorMessageLabel.Text = "Borrower ID not found or invalid DAYS LATE.";
                         SuccessMessageLabel.Text = "";
                         return;
                     }
@@ -80,8 +80,8 @@ namespace LibraryManagement.system
                     BookIdTextBox.Value = "";
 
                     // Display success message
-                    SuccessMessageLabel.Text = "Book returned successfully. DaysAllowed and daysLate: " + numberOfDaysAllowed + daysLate;
-                    ErrorMessageLabel.Text = "Book returned successfully. DaysAllowed and daysLate: " + numberOfDaysAllowed + daysLate;
+                    SuccessMessageLabel.Text = "BRO";
+                    ErrorMessageLabel.Text = "";
                     
                 }
             }
