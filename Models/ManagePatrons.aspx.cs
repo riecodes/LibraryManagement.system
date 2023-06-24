@@ -12,6 +12,20 @@ namespace LibraryManagement.system.Models
         {
             if (!IsPostBack)
             {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    string query = "INSERT INTO borrowerinfo (borrowerid, borrowerName, course, section) VALUES (@BorrowerId, @Name, @Course, @Section)";
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        connection.Close();
+                    }
+                }
+                // Clear the input fields
+                AddPatronName.Text = string.Empty;
+                AddPatronCourse.Text = string.Empty;
+                AddPatronSection.Text = string.Empty;
+                DeletePatronId.Text = string.Empty;
+                SearchPatronName.Text = string.Empty;
                 LoadPatronData();
             }
         }
@@ -67,11 +81,11 @@ namespace LibraryManagement.system.Models
                         AddPatronConfirmation.Text = "Failed to add patron";
                         AddPatronConfirmation.CssClass = "error-message";
                     }
+                    connection.Close();
                 }
             }
         }
 
-        // Helper method to generate a unique borrowerid value
         private string GenerateBorrowerId(string name, string course, string section)
         {
             string initials = GetInitials(name);
@@ -79,10 +93,36 @@ namespace LibraryManagement.system.Models
             string courseCode = GetCourseCode(course);
             string sectionCode = GetSectionCode(section);
 
-            string borrowerId = initials + date + courseCode + sectionCode;
+            int borrowerCount = GetBorrowerCountFromDatabase(); // Retrieve the borrower count from the database
+
+            borrowerCount++; // Increment the borrower count
+
+            string borrowerId = initials + date + courseCode + sectionCode + borrowerCount.ToString();
 
             return borrowerId;
         }
+
+        private int GetBorrowerCountFromDatabase()
+        {
+            int borrowerCount = 0;
+
+            // Query the database to retrieve the borrower count
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                string query = "SELECT COUNT(*) FROM borrowerinfo";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    connection.Open();
+                    borrowerCount = Convert.ToInt32(command.ExecuteScalar());
+                    connection.Close();
+                }
+                
+            }
+
+            return borrowerCount;
+            
+        }
+
 
 
         private string GetInitials(string name)
@@ -187,32 +227,28 @@ namespace LibraryManagement.system.Models
             EditPatronGridView.EditIndex = -1;
             LoadPatronData();
         }
-
         protected void EditPatronGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
-            int rowIndex = e.RowIndex;
+            GridViewRow row = EditPatronGridView.Rows[e.RowIndex];
+            string patronId = ((Label)row.FindControl("lblEditPatronId")).Text;
+            string patronName = ((TextBox)row.FindControl("txtPatronName")).Text;
+            string patronCourse = ((TextBox)row.FindControl("txtPatronCourse")).Text;
+            string patronSection = ((TextBox)row.FindControl("txtPatronSection")).Text;
+            string patronBooksAllowed = ((TextBox)row.FindControl("txtPatronBooksAllowed")).Text;
 
-            // Check if the DataKeys collection has any items
-            if (EditPatronGridView.DataKeys.Count > 0)
-            {
-            // Retrieve the borrowerid value from the DataKeys collection
-            string borrowerId = EditPatronGridView.DataKeys[rowIndex].Values["borrowerid"].ToString();
-            TextBox txtPatronName = EditPatronGridView.Rows[rowIndex].FindControl("txtPatronName") as TextBox;
-            TextBox txtPatronCourse = EditPatronGridView.Rows[rowIndex].FindControl("txtPatronCourse") as TextBox;
-            TextBox txtPatronSection = EditPatronGridView.Rows[rowIndex].FindControl("txtPatronSection") as TextBox;
-
-            string connectionString = "LibraryManagementSystemConnectionString";
+            // Update the patron information in the database
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                connection.Open();
-                string query = "UPDATE borrowerinfo SET borrowerName = @Name, course = @Course, section = @Section WHERE borrowerid = @BorrowerID";
+                string query = "UPDATE borrowerinfo SET borrowerName = @Name, course = @Course, section = @Section, numberofbooksallowed = @BooksAllowed WHERE borrowerid = @Id";
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Name", txtPatronName.Text);
-                    command.Parameters.AddWithValue("@Course", txtPatronCourse.Text);
-                    command.Parameters.AddWithValue("@Section", txtPatronSection.Text);
-                    command.Parameters.AddWithValue("@BorrowerID", borrowerId);
-
+                    command.Parameters.AddWithValue("@Name", patronName);
+                    command.Parameters.AddWithValue("@Course", patronCourse);
+                    command.Parameters.AddWithValue("@Section", patronSection);
+                    command.Parameters.AddWithValue("@BooksAllowed", patronBooksAllowed);
+                    command.Parameters.AddWithValue("@Id", patronId);
+                    connection.Open();
                     int rowsAffected = command.ExecuteNonQuery();
                     if (rowsAffected > 0)
                     {
@@ -230,6 +266,7 @@ namespace LibraryManagement.system.Models
             EditPatronGridView.EditIndex = -1;
             LoadPatronData();
         }
+
 
         protected void LoadPatronData()
         {
@@ -285,6 +322,8 @@ namespace LibraryManagement.system.Models
                         // Display an error message
                         DeletePatronConfirmation.Text = "Failed to delete patron: " + ex.Message;
                     }
+
+                    LoadPatronData();
                 }
             }
         }
