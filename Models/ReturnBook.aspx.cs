@@ -31,6 +31,7 @@ namespace LibraryManagement.system
                     {
                         ErrorMessageLabel.Text = "Borrower ID not found or invalid.";
                         SuccessMessageLabel.Text = "";
+                        LogError("Borrower ID not found or invalid.");
                         return;
                     }
 
@@ -38,18 +39,21 @@ namespace LibraryManagement.system
                     {
                         ErrorMessageLabel.Text = "Invalid book ID or the book is already returned.";
                         SuccessMessageLabel.Text = "";
+                        LogError("Invalid book ID or the book is already returned.");
                         return;
                     }
 
                     // Check for late returns
                     int numberOfDaysAllowed = GetNumberOfDaysAllowed(connection, bookId);
                     int daysLate = CalculateDaysLate(connection, borrowerId, numberOfDaysAllowed);
+                    LogMessage("Days Late: " + daysLate);
 
                     if (daysLate > 3)
                     {
                         // Display penalty message
                         ErrorMessageLabel.Text = "Late return! A penalty will be applied.";
                         SuccessMessageLabel.Text = "";
+                        LogMessage("Late return! A penalty will be applied.");
                         return;
                     }
                     else if (daysLate > 0)
@@ -57,12 +61,14 @@ namespace LibraryManagement.system
                         // Display overdue message
                         ErrorMessageLabel.Text = "Overdue return! The book is " + daysLate + " day(s) late.";
                         SuccessMessageLabel.Text = "";
+                        LogMessage("Overdue return! The book is " + daysLate + " day(s) late.");
                         return;
                     }
                     else
                     {
                         // No penalty or overdue
                         ErrorMessageLabel.Text = "";
+                        LogMessage("No penalty or overdue.");
 
                         // Update book status to "IN" in the database
                         UpdateBookStatus(connection, bookId, "IN");
@@ -86,15 +92,30 @@ namespace LibraryManagement.system
                         // Display success message
                         SuccessMessageLabel.Text = "Book returned successfully.";
                         ErrorMessageLabel.Text = "";
-                    }                    
+                        LogMessage("Book returned successfully.");
+                    }
                 }
             }
             catch (Exception ex)
             {
                 ErrorMessageLabel.Text = "An error occurred while processing the request. Error: " + ex.Message;
                 SuccessMessageLabel.Text = "";
+                LogError("An error occurred while processing the request. Error: " + ex.Message);
                 // Log the exception or perform additional error handling if needed
             }
+        }
+
+        // Logging functions
+        private void LogMessage(string message)
+        {
+            // Replace this with your desired logging mechanism, such as writing to a log file or using a logging library
+            Console.WriteLine("INFO: " + message);
+        }
+
+        private void LogError(string message)
+        {
+            // Replace this with your desired logging mechanism, such as writing to a log file or using a logging library
+            Console.WriteLine("ERROR: " + message);
         }
 
         private bool ValidateBorrower(MySqlConnection connection, string borrowerId)

@@ -25,8 +25,11 @@
         <hr class="vertical-line"/>
         <!--NAVBAR END-->
         <div class="content">
-            <form id="form" runat="server">
-            
+            <form id="form4" runat="server">
+                <div class="box">
+                    <h1>Transaction Information</h1>
+                    <asp:GridView ID="TransactionGridView" runat="server" AutoGenerateColumns="true"></asp:GridView>
+                </div>
             </form>
         </div>
     </div>
