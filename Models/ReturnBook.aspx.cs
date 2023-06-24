@@ -30,7 +30,6 @@ namespace LibraryManagement.system
                     {
                         ErrorMessageLabel.Text = "Borrower ID not found or invalid.";
                         SuccessMessageLabel.Text = "";
-                        LogError("Borrower ID not found or invalid.");
                         return;
                     }
 
@@ -38,83 +37,89 @@ namespace LibraryManagement.system
                     {
                         ErrorMessageLabel.Text = "Invalid book ID or the book is already returned.";
                         SuccessMessageLabel.Text = "";
-                        LogError("Invalid book ID or the book is already returned.");
                         return;
                     }
 
                     // Check for late returns
                     int numberOfDaysAllowed = GetNumberOfDaysAllowed(connection, bookId);
-                    int daysLate = CalculateDaysLate(connection, borrowerId, numberOfDaysAllowed);
-                    LogMessage("Days Late: " + daysLate);
+                    int daysLate = CalculateDaysLate(connection, borrowerId, bookId, numberOfDaysAllowed);
 
                     if (daysLate > 3)
                     {
                         // Display penalty message
-                        ErrorMessageLabel.Text = "Late return! A penalty will be applied.";
+                        ErrorMessageLabel.Text = "Late return! A penalty will be applied. " + daysLate + " day(s) late.";
                         SuccessMessageLabel.Text = "";
-                        LogMessage("Late return! A penalty will be applied.");
-                        return;
                     }
                     else if (daysLate > 0)
                     {
                         // Display overdue message
                         ErrorMessageLabel.Text = "Overdue return! The book is " + daysLate + " day(s) late.";
                         SuccessMessageLabel.Text = "";
-                        LogMessage("Overdue return! The book is " + daysLate + " day(s) late.");
-                        return;
                     }
-                    else
-                    {
-                        // No penalty or overdue
-                        ErrorMessageLabel.Text = "";
-                        LogMessage("No penalty or overdue.");
 
-                        // Update book status to "IN" in the database
-                        UpdateBookStatus(connection, bookId, "IN");
+                    // No penalty or overdue
+                    ErrorMessageLabel.Text = "";
 
-                        // Increment the borrower's numberofbooksallowed by 1
-                        IncrementNumberOfBooksAllowed(connection, borrowerId);
+                    // Update book status to "IN" in the database
+                    UpdateBookStatus(connection, bookId, "IN");
 
-                        // Generate transaction details
-                        string transactionId = GenerateTransactionId("R-DATE-");
-                        string transactionCatId = "RCAT002";
-                        string transactionCatDetail = "RETURN";
-                        DateTime transactionDate = DateTime.Now;
+                    // Increment the borrower's numberofbooksallowed by 1
+                    IncrementNumberOfBooksAllowed(connection, borrowerId);
 
-                        // Insert the transaction record into the database
-                        InsertTransactionRecord(connection, transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
+                    // Generate transaction details
+                    string transactionId = GenerateTransactionId("R-DATE-");
+                    string transactionCatId = "RCAT002";
+                    string transactionCatDetail = "RETURN";
+                    DateTime transactionDate = DateTime.Now;
 
-                        // Clear the input fields
-                        BorrowerIdTextBox.Value = "";
-                        BookIdTextBox.Value = "";
+                    // Insert the transaction record into the database
+                    InsertTransactionRecord(connection, transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
 
-                        // Display success message
-                        SuccessMessageLabel.Text = "Book returned successfully.";
-                        ErrorMessageLabel.Text = "";
-                        LogMessage("Book returned successfully.");
-                    }
+                    // Clear the input fields
+                    BorrowerIdTextBox.Value = "";
+                    BookIdTextBox.Value = "";
+
+                    // Display success message
+                    SuccessMessageLabel.Text = "Book returned successfully. DaysAllowed and daysLate: " + numberOfDaysAllowed + daysLate;
+                    ErrorMessageLabel.Text = "Book returned successfully. DaysAllowed and daysLate: " + numberOfDaysAllowed + daysLate;
+                    
                 }
             }
             catch (Exception ex)
             {
                 ErrorMessageLabel.Text = "An error occurred while processing the request. Error: " + ex.Message;
                 SuccessMessageLabel.Text = "";
-                LogError("An error occurred while processing the request. Error: " + ex.Message);
-                // Log the exception or perform additional error handling if needed
             }
         }
 
-        // Logging functions
-        private void LogMessage(string message)
+        private int CalculateDaysLate(MySqlConnection connection, string borrowerId, string bookId, int numberOfDaysAllowed)
         {
-            // Replace this with your desired logging mechanism, such as writing to a log file or using a logging library
-            Console.WriteLine("INFO: " + message);
-        }
+            string query = "SELECT DATEDIFF(DATE_ADD(t.transdate, INTERVAL b.numberofdaysallowed DAY), CURDATE()) " +
+                           "FROM transactioninfo t " +
+                           "JOIN bookinfo b ON t.bookid = b.bookid " +
+                           "WHERE t.borrowerid = @BorrowerId " +
+                           "AND t.bookid = @BookId " +
+                           "AND t.transcatdetail = 'BORROW' " +
+                           "AND b.status = 'OUT' " +
+                           "ORDER BY t.transdate DESC LIMIT 1";
 
-        private void LogError(string message)
-        {
-            // Replace this with your desired logging mechanism, such as writing to a log file or using a logging library
-            Console.WriteLine("ERROR: " + message);
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@BorrowerId", borrowerId);
+                command.Parameters.AddWithValue("@BookId", bookId);
+                object result = command.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    int daysLate = Convert.ToInt32(result);
+                    int daysAllowed = numberOfDaysAllowed;
+
+                    if (daysLate > daysAllowed)
+                    {
+                        return daysLate - daysAllowed;
+                    }
+                }
+                return 0;
+            }
         }
 
         private bool ValidateBorrower(MySqlConnection connection, string borrowerId)
@@ -147,34 +152,6 @@ namespace LibraryManagement.system
                 command.Parameters.AddWithValue("@BookId", bookId);
                 int numberOfDaysAllowed = Convert.ToInt32(command.ExecuteScalar());
                 return numberOfDaysAllowed;
-            }
-        }
-
-        private int CalculateDaysLate(MySqlConnection connection, string borrowerId, int numberOfDaysAllowed)
-        {
-            string query = "SELECT DATEDIFF(CURDATE(), DATE_ADD(t.transdate, INTERVAL b.numberofdaysallowed DAY)) " +
-                           "FROM transactioninfo t " +
-                           "JOIN bookinfo b ON t.bookid = b.bookid " +
-                           "WHERE t.borrowerid = @BorrowerId " +
-                           "AND t.transcatdetail = 'BORROW' " +
-                           "AND b.status = 'OUT' " +
-                           "ORDER BY t.transdate DESC LIMIT 1";
-
-            using (MySqlCommand command = new MySqlCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@BorrowerId", borrowerId);
-                object result = command.ExecuteScalar();
-                if (result != null && result != DBNull.Value)
-                {
-                    int daysLate = Convert.ToInt32(result);
-                    int daysAllowed = numberOfDaysAllowed;
-
-                    if (daysLate > daysAllowed)
-                    {
-                        return daysLate - daysAllowed;
-                    }
-                }
-                return 0;
             }
         }
 

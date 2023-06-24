@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>View Transactions</title>
-    <link rel="stylesheet" href="css/managetransactions_New.css"/>
+    <link href="css/viewtrans.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Montserrat&family=Roboto&display=swap" rel="stylesheet"/>
@@ -28,41 +28,47 @@
             <div class="content">
                 <div class="box">
                     <h1>Transaction Information</h1>
-                    <asp:GridView ID="TransactionGridView" runat="server" AutoGenerateColumns="false">
-                        <Columns>
-                            <asp:TemplateField HeaderText="Transaction ID">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" Text='<%# Eval("transid") %>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Transaction Category ID">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" Text='<%# Eval("transcatid") %>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Transaction Category Detail">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" Text='<%# Eval("transcatdetail") %>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Borrower ID">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" Text='<%# Eval("borrowerid") %>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Book ID">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" Text='<%# Eval("bookid") %>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Transaction Date">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" Text='<%# Eval("transdate", "{0:yyyy-MM-dd}") %>'></asp:Label>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                           
-                        </Columns>
-                    </asp:GridView>
+                    <div class="grid">
+                        <asp:GridView ID="TransactionGridView" runat="server" AutoGenerateColumns="false" DataKeyNames="transid">
+                            <Columns>
+                                <asp:TemplateField HeaderText="Transaction ID">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" Text='<%# Eval("transid") %>'></asp:Label>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Transaction Category ID">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" Text='<%# Eval("transcatid") %>'></asp:Label>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Transaction Category Detail">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" Text='<%# Eval("transcatdetail") %>'></asp:Label>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Borrower ID">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" Text='<%# Eval("borrowerid") %>'></asp:Label>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Book ID">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" Text='<%# Eval("bookid") %>'></asp:Label>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Transaction Date">
+                                    <ItemTemplate>
+                                        <asp:Label runat="server" Text='<%# Eval("transdate", "{0:yyyy-MM-dd}") %>'></asp:Label>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField>
+                                    <ItemTemplate>
+                                        <asp:Button ID="DeleteButton" runat="server" Text="Delete" OnClick="DeleteButton_Click" />                                        
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                        </asp:GridView>
+                    </div>
                 </div>
             </div>
         </div>

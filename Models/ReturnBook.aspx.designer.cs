@@ -51,6 +51,15 @@ namespace LibraryManagement.system
         protected global::System.Web.UI.WebControls.Label ErrorMessageLabel;
 
         /// <summary>
+        /// ErrorMessageLabel2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label ErrorMessageLabel2;
+
+        /// <summary>
         /// SuccessMessageLabel control.
         /// </summary>
         /// <remarks>
@@ -58,6 +67,15 @@ namespace LibraryManagement.system
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label SuccessMessageLabel;
+
+        /// <summary>
+        /// SuccessMessageLabel2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label SuccessMessageLabel2;
 
         /// <summary>
         /// ReturnButton control.
