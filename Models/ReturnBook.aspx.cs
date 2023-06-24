@@ -41,6 +41,21 @@ namespace LibraryManagement.system
                         return;
                     }
 
+                    // Check for late returns
+                    int numberOfDaysAllowed = GetNumberOfDaysAllowed(connection, bookId);
+                    int daysLate = CalculateDaysLate(connection, borrowerId, numberOfDaysAllowed);
+
+                    if (daysLate > 3)
+                    {
+                        // Display penalty message
+                        ErrorMessageLabel.Text = "Late return! A penalty will be applied.";
+                    }
+                    else if (daysLate > 0)
+                    {
+                        // Display overdue message
+                        ErrorMessageLabel.Text = "Overdue return! The book is " + daysLate + " day(s) late.";
+                    }
+
                     // Update book status to "IN" in the database
                     UpdateBookStatus(connection, bookId, "IN");
 
@@ -92,6 +107,33 @@ namespace LibraryManagement.system
                 command.Parameters.AddWithValue("@BookId", bookId);
                 string status = command.ExecuteScalar()?.ToString();
                 return status == "OUT";
+            }
+        }
+
+        private int GetNumberOfDaysAllowed(MySqlConnection connection, string bookId)
+        {
+            string query = "SELECT numberofdaysallowed FROM bookinfo WHERE bookid = @BookId";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@BookId", bookId);
+                int numberOfDaysAllowed = Convert.ToInt32(command.ExecuteScalar());
+                return numberOfDaysAllowed;
+            }
+        }
+
+        private int CalculateDaysLate(MySqlConnection connection, string borrowerId, int numberOfDaysAllowed)
+        {
+            string query = "SELECT DATEDIFF(CURDATE(), transdate) FROM transactioninfo WHERE borrowerid = @BorrowerId AND transcatdetail = 'BORROW' ORDER BY transdate DESC LIMIT 1";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@BorrowerId", borrowerId);
+                object result = command.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    int daysLate = Convert.ToInt32(result) - numberOfDaysAllowed;
+                    return Math.Max(daysLate, 0);
+                }
+                return 0;
             }
         }
 

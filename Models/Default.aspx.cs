@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Data;
 using MySql.Data.MySqlClient;
 using System.Web.UI.WebControls;
+using System.Collections.Generic;
 
 namespace LibraryManagement.system.Models
 {
@@ -135,17 +136,18 @@ namespace LibraryManagement.system.Models
         public void ClearInputFields()
         {
             // Clear the input fields
-            txtBookCategory.Value = "";
-            txtBookCategoryDetail.Value = "";
-            txtBookTitle.Value = "";
-            txtCopyNumber.Value = "";
-            txtNumberOfDaysAllowed.Value = "";
+            txtBookCategory.Value = string.Empty;
+            txtBookCategoryDetail.Value = string.Empty;
+            txtBookTitle.Value = string.Empty;
+            txtCopyNumber.Value = string.Empty;
+            txtNumberOfDaysAllowed.Value = string.Empty;
+            lblDeleteBookError.Text = string.Empty;
+            lblAddBookError.Text = string.Empty;
+            DeleteBookId.Text = string.Empty;
 
             // Set the default value for Number of Days Allowed
             txtNumberOfDaysAllowed.Value = "3";
 
-            // Clear the error label
-            lblAddBookError.Text = string.Empty;
         }
 
         private string GenerateBookId(string bookCategory, int copyNumber, MySqlConnection con)
@@ -296,28 +298,95 @@ namespace LibraryManagement.system.Models
         {
             string bookID = DeleteBookId.Text;
 
+            // Validate input
+            if (string.IsNullOrWhiteSpace(bookID))
+            {
+                lblDeleteBookError.Text = "Please enter a valid Book ID.";
+                return;
+            }
+
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
             using (MySqlConnection con = new MySqlConnection(connectionString))
             {
-                string query = "DELETE FROM bookinfo WHERE bookid = @BookID";
-
-                MySqlCommand cmd = new MySqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@BookID", bookID);
-
                 try
                 {
                     con.Open();
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    con.Close();
 
-                    if (rowsAffected > 0)
+                    // Check if the book exists
+                    string bookQuery = "SELECT * FROM bookinfo WHERE bookid = @BookID";
+                    MySqlCommand bookCmd = new MySqlCommand(bookQuery, con);
+                    bookCmd.Parameters.AddWithValue("@BookID", bookID);
+                    MySqlDataReader bookReader = bookCmd.ExecuteReader();
+
+                    if (!bookReader.HasRows)
                     {
-                        DeleteBookConfirmation.Text = "Book deleted successfully.";
+                        lblDeleteBookError.Text = "Book not found.";
+                        bookReader.Close();
+                        return;
                     }
-                    else
+
+                    bookReader.Close();
+
+                    // Check if the book has any associated transactioninfo
+                    string transactionQuery = "SELECT transid, transcatdetail FROM transactioninfo WHERE bookid = @BookID";
+                    MySqlCommand transactionCmd = new MySqlCommand(transactionQuery, con);
+                    transactionCmd.Parameters.AddWithValue("@BookID", bookID);
+                    MySqlDataReader transactionReader = transactionCmd.ExecuteReader();
+
+                    if (transactionReader.HasRows)
                     {
-                        DeleteBookConfirmation.Text = "Book not found.";
+                        List<string> borrowTransactionIDs = new List<string>();
+                        List<string> returnTransactionIDs = new List<string>();
+
+                        while (transactionReader.Read())
+                        {
+                            string transactionID = transactionReader["transid"].ToString();
+                            string transactionCategory = transactionReader["transcatdetail"].ToString();
+
+                            if (transactionCategory == "BORROW")
+                            {
+                                borrowTransactionIDs.Add(transactionID);
+                            }
+                            else if (transactionCategory == "RETURN")
+                            {
+                                returnTransactionIDs.Add(transactionID);
+                            }
+                        }
+
+                        // Book has associated transactions, display confirmation message
+                        string confirmationMessage = "This book has the following transactions:\n";
+
+                        if (borrowTransactionIDs.Count > 0)
+                        {
+                            confirmationMessage += "- Borrow transaction IDs:\n";
+                            foreach (string transactionID in borrowTransactionIDs)
+                            {
+                                confirmationMessage += $"  - {transactionID}\n";
+                            }
+                        }
+
+                        if (returnTransactionIDs.Count > 0)
+                        {
+                            confirmationMessage += "- Return transaction IDs:\n";
+                            foreach (string transactionID in returnTransactionIDs)
+                            {
+                                confirmationMessage += $"  - {transactionID}\n";
+                            }
+                        }
+
+                        confirmationMessage += "Are you sure you want to delete it?";
+
+                        // Hide the delete button and display the confirmation message
+                        DeleteBookButton.Visible = false;
+                        ConfirmDeleteBookButton.Visible = true;
+                        ConfirmDeleteBookButton.Attributes["onclick"] = $"DeleteBook('{bookID}');";
+
+                        DeleteBookConfirmation.Text = confirmationMessage;
+                        BindBookGrid();
                     }
+
+
+                    transactionReader.Close();
                 }
                 catch (Exception ex)
                 {
@@ -327,5 +396,49 @@ namespace LibraryManagement.system.Models
 
             BindBookGrid();
         }
+
+        protected void ConfirmDeleteBookButton_Click(object sender, EventArgs e)
+        {
+            string bookID = DeleteBookId.Text;
+
+            // Validate input again (optional)
+            if (string.IsNullOrWhiteSpace(bookID))
+            {
+                lblDeleteBookError.Text = "Please enter a valid Book ID.";
+                return;
+            }
+
+            DeleteBook(bookID);
+        }
+
+        private void DeleteBook(string bookID)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                con.Open();
+
+                // Delete the associated transactioninfo first
+                string deleteTransactionQuery = "DELETE FROM transactioninfo WHERE bookid = @BookID";
+                MySqlCommand deleteTransactionCmd = new MySqlCommand(deleteTransactionQuery, con);
+                deleteTransactionCmd.Parameters.AddWithValue("@BookID", bookID);
+                deleteTransactionCmd.ExecuteNonQuery();
+
+                // Delete the book itself
+                string deleteBookQuery = "DELETE FROM bookinfo WHERE bookid = @BookID";
+                MySqlCommand deleteBookCmd = new MySqlCommand(deleteBookQuery, con);
+                deleteBookCmd.Parameters.AddWithValue("@BookID", bookID);
+                deleteBookCmd.ExecuteNonQuery();
+
+                con.Close();
+            }
+
+            DeleteBookConfirmation.Text = "Book deleted successfully.";
+            ClearInputFields();
+        }
+
+
+
     }
 }

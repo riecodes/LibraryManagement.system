@@ -47,7 +47,7 @@ namespace LibraryManagement.system
                         // Check if the borrower already has maximum allowed books borrowed on the same day
                         if (HasMaximumBooksBorrowedOnSameDay(borrowerId))
                         {
-                            ErrorMessageLabel.Text = "The maximum number of books allowed to borrow on the same day has been reached.";
+                            ErrorMessageLabel.Text = "The maximum number of this book allowed to borrow on the same day has been reached.";
                             SuccessMessageLabel.Text = "";
                             return;
                         }
@@ -165,19 +165,19 @@ namespace LibraryManagement.system
             }
         }
 
-        private bool HasMaximumBooksBorrowedOnSameDay(string borrowerId)
+        private bool HasMaximumBooksBorrowedOnSameDay(string bookId)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
-            string query = "SELECT COUNT(*) FROM transactioninfo WHERE borrowerid = @BorrowerId AND transcatdetail = 'BORROW' AND DATE(transdate) = @TransactionDate";
+            string query = "SELECT COUNT(*) FROM transactioninfo WHERE bookid = @BookId AND transcatdetail = 'BORROW' AND DATE(transdate) = @TransactionDate";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@BorrowerId", borrowerId);
+                    command.Parameters.AddWithValue("@BookId", bookId);
                     command.Parameters.AddWithValue("@TransactionDate", DateTime.Today);
                     connection.Open();
                     int count = Convert.ToInt32(command.ExecuteScalar());
-                    return count >= 3; // Maximum 3 books allowed to borrow on the same day
+                    return count >= 3; // Maximum 3 books allowed to borrow on the same day for each book category
                 }
             }
         }

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ManagePatrons.aspx.cs" Inherits="LibraryManagement.system.Models.ManagePatrons" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ManageBorrowers.aspx.cs" Inherits="LibraryManagement.system.Models.ManagePatrons" %>
 
 <!DOCTYPE html>
 
@@ -19,7 +19,7 @@
                     <li><a href="Default.aspx"><p>Home</p></a></li>
                     <li><a href="BorrowBook.aspx"><p>Borrow Book</p></a></li>
                     <li><a href="ReturnBook.aspx"><p>Return Book</p></a></li>
-                    <li><a href="ManagePatrons.aspx"><p>Manage Borrowers</p></a></li>
+                    <li><a href="ManageBorrowers.aspx"><p>Manage Borrowers</p></a></li>
                     <li><a href="ManageTransactions.aspx"><p>Manage Transactions</p></a></li>
                 </ul>
             </div>
@@ -41,7 +41,7 @@
                         <asp:TextBox CssClass="asptextbox" ID="AddPatronSection" runat="server"></asp:TextBox>
                     </div>
                     <div>
-                        <asp:Button CssClass="aspbutton" ID="AddPatronButton" runat="server" Text="Add Patron" OnClick="AddPatronButton_Click" />
+                        <asp:Button CssClass="aspbutton" ID="AddPatronButton" runat="server" Text="Add Borrower" OnClick="AddPatronButton_Click" />
                     </div>
                     <div>
                         <asp:Label CssClass="asplabel" ID="AddPatronConfirmation" runat="server"></asp:Label>

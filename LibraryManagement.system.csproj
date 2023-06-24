@@ -113,7 +113,7 @@
     <Content Include="Models\css\managetransactions.css" />
     <Content Include="Models\css\returnbooks.css" />
     <Content Include="Models\Default.aspx" />
-    <Content Include="Models\ManagePatrons.aspx" />
+    <Content Include="Models\ManageBorrowers.aspx" />
     <Content Include="Models\ManageTransactions.aspx" />
     <Content Include="Models\ReturnBook.aspx" />
     <Content Include="Models\BorrowBook.aspx" />
@@ -127,12 +127,12 @@
     <Compile Include="Models\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Models\ManagePatrons.aspx.cs">
-      <DependentUpon>ManagePatrons.aspx</DependentUpon>
+    <Compile Include="Models\ManageBorrowers.aspx.cs">
+      <DependentUpon>ManageBorrowers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Models\ManagePatrons.aspx.designer.cs">
-      <DependentUpon>ManagePatrons.aspx</DependentUpon>
+    <Compile Include="Models\ManageBorrowers.aspx.designer.cs">
+      <DependentUpon>ManageBorrowers.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageTransactions.aspx.cs">
       <DependentUpon>ManageTransactions.aspx</DependentUpon>
