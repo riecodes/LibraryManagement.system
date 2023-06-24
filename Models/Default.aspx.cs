@@ -437,8 +437,5 @@ namespace LibraryManagement.system.Models
             DeleteBookConfirmation.Text = "Book deleted successfully.";
             ClearInputFields();
         }
-
-
-
     }
 }
