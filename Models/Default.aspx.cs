@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Data;
 using MySql.Data.MySqlClient;
 using System.Web.UI.WebControls;
-using System.Web.UI;
 
 namespace LibraryManagement.system.Models
 {
@@ -14,13 +13,8 @@ namespace LibraryManagement.system.Models
             if (!IsPostBack)
             {
                 ClearInputFields();
-                BindGrid();
-            }
-            else
-            {                
-                BindGrid();
-            }
-             
+                BindBookGrid();
+            }             
         }
 
         protected void BtnAddBook_Click(object sender, EventArgs e)
@@ -120,12 +114,9 @@ namespace LibraryManagement.system.Models
                         int rowsAffected = insertCmd.ExecuteNonQuery();
 
                         if (rowsAffected > 0)
-                        {
-                            ClearInputFields();
-
-                            lblAddBookError.Text = "Book added successfully."; 
-                            
-                            BindGrid();
+                        {                            
+                            lblAddBookError.Text = "Book added successfully.";                             
+                            BindBookGrid();
                         }
                         else
                         {
@@ -186,97 +177,89 @@ namespace LibraryManagement.system.Models
             }
         }
 
-        protected void BindGrid()
+        private void BindBookGrid()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
-            using (MySqlConnection con = new MySqlConnection(connectionString))
+            string constr = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            using (MySqlConnection con = new MySqlConnection(constr))
             {
-                string query = "SELECT * FROM bookinfo";
-                MySqlCommand cmd = new MySqlCommand(query, con);
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                BookGridView.DataSource = dt;
-                BookGridView.DataBind();
-
-                // Reset the EditIndex after data binding
-                BookGridView.EditIndex = -1;
+                using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM bookinfo", con))
+                {
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        sda.Fill(dt);
+                        BookGridView.DataSource = dt;
+                        BookGridView.DataBind();
+                    }
+                }
             }
         }
 
         protected void BookGridView_RowEditing(object sender, GridViewEditEventArgs e)
         {
             BookGridView.EditIndex = e.NewEditIndex;
-            BindGrid();
+            BindBookGrid();
         }
 
         protected void BookGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
         {
             BookGridView.EditIndex = -1;
-            BindGrid();
+            BindBookGrid();
         }
 
         protected void BookGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
             GridViewRow row = BookGridView.Rows[e.RowIndex];
+            string bookId = BookGridView.DataKeys[e.RowIndex].Value.ToString();
+            string bookCategory = (row.FindControl("TextBoxBookCategory") as TextBox).Text.Trim();
+            string bookCategoryDetail = (row.FindControl("TextBoxBookCategoryDetail") as TextBox).Text.Trim();
+            string updatedBookId = (row.FindControl("TextBoxBookId") as Label).Text.Trim();
+            string bookTitle = (row.FindControl("TextBoxBookTitle") as TextBox).Text.Trim();
+            int copyNumber = Convert.ToInt32((row.FindControl("TextBoxCopyNumber") as TextBox).Text.Trim());
+            string status = (row.FindControl("TextBoxStatus") as TextBox).Text.Trim();
+            int numberOfDaysAllowed = Convert.ToInt32((row.FindControl("TextBoxNumberOfDaysAllowed") as TextBox).Text.Trim());
 
-            // Retrieve the updated values from the TextBox controls in the GridView row
-            string updatedBookCategory = GetUpdatedValue(row.FindControl("TextBoxBookCategory") as TextBox);
-            string updatedBookCategoryDetail = GetUpdatedValue(row.FindControl("TextBoxBookCategoryDetail") as TextBox);
-            string updatedBookId = GetUpdatedValue(row.FindControl("TextBoxBookBookId") as TextBox);
-            string updatedBookTitle = GetUpdatedValue(row.FindControl("TextBoxBookTitle") as TextBox);
-
-            
-            int.TryParse(GetUpdatedValue(row.FindControl("TextBoxCopyNumber") as TextBox), out int updatedCopyNumber);
-
-            string updatedStatus = GetUpdatedValue(row.FindControl("TextBoxStatus") as TextBox);
-        
-            int.TryParse(GetUpdatedValue(row.FindControl("TextBoxNumberOfDaysAllowed") as TextBox), out int updatedNumberOfDaysAllowed);
-
-            // Update the data in the database using the retrieved values
-            try
+            string constr = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            using (MySqlConnection con = new MySqlConnection(constr))
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
-                using (MySqlConnection con = new MySqlConnection(connectionString))
+                using (MySqlCommand cmd = new MySqlCommand("UPDATE bookinfo SET bookcategory = @BookCategory, bookcatdetail = @BookCategoryDetail, bookid = @UpdatedBookId, booktitle = @BookTitle, copynum = @CopyNumber, status = @Status, numberofdaysallowed = @NumberOfDaysAllowed WHERE bookid = @BookId", con))
                 {
-                    string query = "UPDATE bookinfo SET bookcategory = @UpdatedBookCategory, bookcatdetail = @UpdatedBookCategoryDetail, " +
-                                   "bookid = @UpdatedBookId, booktitle = @UpdatedBookTitle, copynum = @UpdatedCopyNumber, " +
-                                   "status = @UpdatedStatus, numberofdaysallowed = @UpdatedNumberOfDaysAllowed WHERE bookid = @BookId";
-
-                    MySqlCommand cmd = new MySqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@UpdatedBookCategory", updatedBookCategory);
-                    cmd.Parameters.AddWithValue("@UpdatedBookCategoryDetail", updatedBookCategoryDetail);
+                    cmd.Parameters.AddWithValue("@BookCategory", bookCategory);
+                    cmd.Parameters.AddWithValue("@BookCategoryDetail", bookCategoryDetail);
                     cmd.Parameters.AddWithValue("@UpdatedBookId", updatedBookId);
-                    cmd.Parameters.AddWithValue("@UpdatedBookTitle", updatedBookTitle);
-                    cmd.Parameters.AddWithValue("@UpdatedCopyNumber", updatedCopyNumber);
-                    cmd.Parameters.AddWithValue("@UpdatedStatus", updatedStatus);
-                    cmd.Parameters.AddWithValue("@UpdatedNumberOfDaysAllowed", updatedNumberOfDaysAllowed);
-                    cmd.Parameters.AddWithValue("@BookId", BookGridView.DataKeys[e.RowIndex].Value.ToString());
-
+                    cmd.Parameters.AddWithValue("@BookTitle", bookTitle);
+                    cmd.Parameters.AddWithValue("@CopyNumber", copyNumber);
+                    cmd.Parameters.AddWithValue("@Status", status);
+                    cmd.Parameters.AddWithValue("@NumberOfDaysAllowed", numberOfDaysAllowed);
+                    cmd.Parameters.AddWithValue("@BookId", bookId);
                     con.Open();
                     cmd.ExecuteNonQuery();
                     con.Close();
-
-                    BookGridView.EditIndex = -1;
-                    BindGrid();
                 }
             }
-            catch (Exception ex)
-            {
-                // Handle any error that occurred during the database update
-                // You can display an error message or perform other actions as needed
-                lblEditBookError.Text = "An error occurred while updating the record: " + ex.Message;
-            }
+
+            BookGridView.EditIndex = -1;
+            BindBookGrid(); // Rebind the GridView with updated data
         }
 
-        private string GetUpdatedValue(TextBox textBox)
+
+        protected void BookGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            if (textBox != null)
+            string bookId = BookGridView.DataKeys[e.RowIndex].Value.ToString();
+
+            string constr = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            using (MySqlConnection con = new MySqlConnection(constr))
             {
-                return textBox.Text;
+                using (MySqlCommand cmd = new MySqlCommand("DELETE FROM bookinfo WHERE bookid = @BookId", con))
+                {
+                    cmd.Parameters.AddWithValue("@BookId", bookId);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
             }
-            return string.Empty;
+
+            BindBookGrid();
         }
 
         protected void SearchBookButton_Click(object sender, EventArgs e)
@@ -342,7 +325,7 @@ namespace LibraryManagement.system.Models
                 }
             }
 
-            BindGrid();
+            BindBookGrid();
         }
     }
 }

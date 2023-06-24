@@ -85,6 +85,14 @@
                         OnRowCancelingEdit="BookGridView_RowCancelingEdit"
                         OnRowUpdating="BookGridView_RowUpdating">    
                         <Columns>
+                            <asp:TemplateField HeaderText="Book ID" ItemStyle-Width="200">
+                                <ItemTemplate>
+                                    <asp:Label runat="server" Text='<%# Eval("bookid") %>'></asp:Label>
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:Label ID="TextBoxBookId" runat="server" Text='<%# Bind("bookid") %>'></asp:Label>
+                                </EditItemTemplate>
+                            </asp:TemplateField>
                             <asp:TemplateField HeaderText="Book Category" ItemStyle-Width="130">
                                 <ItemTemplate>
                                     <asp:Label runat="server" Text='<%# Eval("bookcategory") %>'></asp:Label>
@@ -100,15 +108,7 @@
                                 <EditItemTemplate>
                                     <asp:TextBox ID="TextBoxBookCategoryDetail" runat="server" Text='<%# Bind("bookcatdetail") %>'></asp:TextBox>
                                 </EditItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Book ID" ItemStyle-Width="200">
-                                <ItemTemplate>
-                                    <asp:Label runat="server" Text='<%# Eval("bookid") %>'></asp:Label>
-                                </ItemTemplate>
-                                <EditItemTemplate>
-                                    <asp:TextBox ID="TextBoxBookBookId" runat="server" Text='<%# Bind("bookid") %>'></asp:TextBox>
-                                </EditItemTemplate>
-                            </asp:TemplateField>
+                            </asp:TemplateField>                            
                             <asp:TemplateField HeaderText="Book Title" ItemStyle-Width="300">
                                 <ItemTemplate>
                                     <asp:Label runat="server" Text='<%# Eval("booktitle") %>'></asp:Label>

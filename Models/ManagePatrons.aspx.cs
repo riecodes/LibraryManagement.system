@@ -12,22 +12,10 @@ namespace LibraryManagement.system.Models
         {
             if (!IsPostBack)
             {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
-                {
-                    string query = "INSERT INTO borrowerinfo (borrowerid, borrowerName, course, section) VALUES (@BorrowerId, @Name, @Course, @Section)";
-                    using (MySqlCommand command = new MySqlCommand(query, connection))
-                    {
-                        connection.Close();
-                    }
-                }
-                // Clear the input fields
-                AddPatronName.Text = string.Empty;
-                AddPatronCourse.Text = string.Empty;
-                AddPatronSection.Text = string.Empty;
-                DeletePatronId.Text = string.Empty;
-                SearchPatronName.Text = string.Empty;
+                ClearFields();
                 LoadPatronData();
             }
+
         }
 
         private string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
@@ -43,6 +31,15 @@ namespace LibraryManagement.system.Models
             {
                 AddPatronConfirmation.Text = "Please enter all required fields.";
                 AddPatronConfirmation.CssClass = "error-message";
+                return;
+            }
+
+            // Check if the borrower already exists in the database
+            if (IsBorrowerExists(patronName, patronCourse, patronSection))
+            {
+                // Display an error message or handle the duplicate entry case as desired
+                AddPatronConfirmation.Text = "Borrower already exists.";
+                ClearFields();
                 return;
             }
 
@@ -84,6 +81,33 @@ namespace LibraryManagement.system.Models
                     connection.Close();
                 }
             }
+        }
+
+        private bool IsBorrowerExists(string name, string course, string section)
+        {
+            bool exists = false;
+
+            // Query the database to check if the borrower already exists
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                string query = "SELECT COUNT(*) FROM borrowerinfo WHERE borrowerName = @Name AND course = @Course AND section = @Section";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Name", name);
+                    command.Parameters.AddWithValue("@Course", course);
+                    command.Parameters.AddWithValue("@Section", section);
+
+                    connection.Open();
+                    int count = Convert.ToInt32(command.ExecuteScalar());
+
+                    if (count > 0)
+                    {
+                        exists = true;
+                    }
+                }
+            }
+
+            return exists;
         }
 
         private string GenerateBorrowerId(string name, string course, string section)
@@ -187,12 +211,23 @@ namespace LibraryManagement.system.Models
                         {
                             if (reader.HasRows)
                             {
-                                // Patrons found, display the search results
+                                // Patrons found, display the search results                                
                                 SearchPatronGridView.DataSource = reader;
                                 SearchPatronGridView.DataBind();
 
                                 // Hide the "No patrons found" message, if previously shown
                                 SearchPatronResults.Visible = false;
+
+                                // Get the count of borrowers found
+                                int borrowerCount = 0;
+                                while (reader.Read())
+                                {
+                                    borrowerCount++;
+                                }
+
+                                // Display the success message with the borrower count
+                                SearchPatronResults.Text = $"Found {borrowerCount} patron(s).";
+                                SearchPatronResults.Visible = true;
                             }
                             else
                             {
@@ -310,6 +345,7 @@ namespace LibraryManagement.system.Models
                         {
                             // Display a success message
                             DeletePatronConfirmation.Text = "Patron deleted successfully";
+                            ClearFields();
                         }
                         else
                         {
@@ -326,6 +362,15 @@ namespace LibraryManagement.system.Models
                     LoadPatronData();
                 }
             }
+        }
+        protected void ClearFields()
+        {
+            // Clear the input fields
+            AddPatronName.Text = string.Empty;
+            AddPatronCourse.Text = string.Empty;
+            AddPatronSection.Text = string.Empty;
+            DeletePatronId.Text = string.Empty;
+            SearchPatronName.Text = string.Empty;
         }
     }
 }
