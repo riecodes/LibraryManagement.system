@@ -34,6 +34,13 @@ namespace LibraryManagement.system
             }
             else
             {
+                if (HasNoBooksAllowed(borrowerId))
+                {
+                    ErrorMessageLabel.Text = "You have reached the maximum number of books allowed to borrow.";
+                    SuccessMessageLabel.Text = "";
+                    return;
+                }
+
                 if (ValidateBorrower(borrowerId))
                 {
                     if (!ValidateBookExistence(bookId))
@@ -41,22 +48,18 @@ namespace LibraryManagement.system
                         ErrorMessageLabel.Text = "Book is not available for borrowing.";
                         SuccessMessageLabel.Text = "";
                         return;
-                    }
+                    }                    
+
                     if (ValidateBookAvailability(bookId))
                     {
+                        
                         // Check if the borrower already has maximum allowed books borrowed on the same day
-                        if (HasMaximumBooksBorrowedOnSameDay(borrowerId))
+                        if (HasMaximumBooksBorrowedOnSameDay(bookId))
                         {
                             ErrorMessageLabel.Text = "The maximum number of this book allowed to borrow on the same day has been reached.";
                             SuccessMessageLabel.Text = "";
                             return;
-                        }
-                        if (HasNoBooksAllowed(borrowerId))
-                        {
-                            ErrorMessageLabel.Text = "You have reached the maximum number of books allowed to borrow.";
-                            SuccessMessageLabel.Text = "";
-                            return;
-                        }
+                        }                        
 
                         // Update book status to "OUT" in the database
                         UpdateBookStatus(bookId, "OUT");
@@ -66,7 +69,7 @@ namespace LibraryManagement.system
 
                         // Generate transaction details
                         string transactionId = GenerateTransactionId("B-DATE-");
-                        string transactionCatId = GetBookId(bookId);
+                        string transactionCatId = "BCAT001";
                         string transactionCatDetail = "BORROW";
                         DateTime transactionDate = DateTime.Now;
 
@@ -168,19 +171,19 @@ namespace LibraryManagement.system
         private bool HasMaximumBooksBorrowedOnSameDay(string bookId)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
-            string query = "SELECT COUNT(*) FROM transactioninfo WHERE bookid = @BookId AND transcatdetail = 'BORROW' AND DATE(transdate) = @TransactionDate";
+            string query = "SELECT COUNT(*) FROM transactioninfo WHERE bookid = @BookId AND transcatdetail = 'BORROW' AND DATE(transdate) = DATE(NOW())";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@BookId", bookId);
-                    command.Parameters.AddWithValue("@TransactionDate", DateTime.Today);
                     connection.Open();
                     int count = Convert.ToInt32(command.ExecuteScalar());
                     return count >= 3; // Maximum 3 books allowed to borrow on the same day for each book category
                 }
             }
         }
+
 
         private string GetBookId(string bookId)
         {
@@ -241,7 +244,7 @@ namespace LibraryManagement.system
         private string GenerateTransactionId(string prefix)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
-            string query = "SELECT COUNT(*) FROM transactioninfo WHERE transid LIKE @Prefix AND transdate = @TransactionDate";
+            string query = "SELECT COUNT(*) FROM transactioninfo WHERE transid LIKE @Prefix AND DATE(transdate) = @TransactionDate";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 using (MySqlCommand command = new MySqlCommand(query, connection))

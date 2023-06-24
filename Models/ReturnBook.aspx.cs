@@ -64,7 +64,7 @@ namespace LibraryManagement.system
 
                     // Generate transaction details
                     string transactionId = GenerateTransactionId("R-DATE-");
-                    string transactionCatId = GetBookCategory(connection, bookId);
+                    string transactionCatId = "RCAT002";
                     string transactionCatDetail = "RETURN";
                     DateTime transactionDate = DateTime.Now;
 

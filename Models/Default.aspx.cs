@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Data;
 using MySql.Data.MySqlClient;
 using System.Web.UI.WebControls;
-using System.Collections.Generic;
 
 namespace LibraryManagement.system.Models
 {
@@ -148,6 +147,8 @@ namespace LibraryManagement.system.Models
             // Set the default value for Number of Days Allowed
             txtNumberOfDaysAllowed.Value = "3";
 
+            
+            
         }
 
         private string GenerateBookId(string bookCategory, int copyNumber, MySqlConnection con)
@@ -335,43 +336,14 @@ namespace LibraryManagement.system.Models
 
                     if (transactionReader.HasRows)
                     {
-                        List<string> borrowTransactionIDs = new List<string>();
-                        List<string> returnTransactionIDs = new List<string>();
+                        // Book has associated transactions, display confirmation message
+                        string confirmationMessage = "This book has the following transaction(s):<br>";
 
                         while (transactionReader.Read())
                         {
-                            string transactionID = transactionReader["transid"].ToString();
-                            string transactionCategory = transactionReader["transcatdetail"].ToString();
-
-                            if (transactionCategory == "BORROW")
-                            {
-                                borrowTransactionIDs.Add(transactionID);
-                            }
-                            else if (transactionCategory == "RETURN")
-                            {
-                                returnTransactionIDs.Add(transactionID);
-                            }
-                        }
-
-                        // Book has associated transactions, display confirmation message
-                        string confirmationMessage = "This book has the following transactions:\n";
-
-                        if (borrowTransactionIDs.Count > 0)
-                        {
-                            confirmationMessage += "- Borrow transaction IDs:\n";
-                            foreach (string transactionID in borrowTransactionIDs)
-                            {
-                                confirmationMessage += $"  - {transactionID}\n";
-                            }
-                        }
-
-                        if (returnTransactionIDs.Count > 0)
-                        {
-                            confirmationMessage += "- Return transaction IDs:\n";
-                            foreach (string transactionID in returnTransactionIDs)
-                            {
-                                confirmationMessage += $"  - {transactionID}\n";
-                            }
+                            string transId = transactionReader["transid"].ToString();
+                            string transactionType = transactionReader["transcatdetail"].ToString();
+                            confirmationMessage += $"TransID: {transId}, Transaction Type: {transactionType}<br>";
                         }
 
                         confirmationMessage += "Are you sure you want to delete it?";
@@ -382,9 +354,12 @@ namespace LibraryManagement.system.Models
                         ConfirmDeleteBookButton.Attributes["onclick"] = $"DeleteBook('{bookID}');";
 
                         DeleteBookConfirmation.Text = confirmationMessage;
-                        BindBookGrid();
                     }
-
+                    else
+                    {
+                        // Book has no associated transactions, delete it immediately
+                        DeleteBook(bookID);
+                    }
 
                     transactionReader.Close();
                 }
@@ -396,6 +371,7 @@ namespace LibraryManagement.system.Models
 
             BindBookGrid();
         }
+
 
         protected void ConfirmDeleteBookButton_Click(object sender, EventArgs e)
         {
@@ -435,7 +411,9 @@ namespace LibraryManagement.system.Models
             }
 
             DeleteBookConfirmation.Text = "Book deleted successfully.";
-            ClearInputFields();
+            BindBookGrid();
         }
+
+
     }
 }
