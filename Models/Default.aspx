@@ -56,7 +56,7 @@
                             <asp:Button ID="btnAddBook" runat="server" Text="Add Book" OnClick="BtnAddBook_Click" CssClass="btn btn-primary" />
                         </div>
                         <div class="col-md-6">
-                            <asp:Label ID="lblAddBookError" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="2"></asp:Label>
+                            <asp:Label ID="lblAddBookError" runat="server" CssClass="form-control" ></asp:Label>
                         </div>
                     </div>                    
 

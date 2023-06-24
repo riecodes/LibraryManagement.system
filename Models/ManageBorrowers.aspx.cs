@@ -192,62 +192,30 @@ namespace LibraryManagement.system.Models
 
         protected void SearchPatronButton_Click(object sender, EventArgs e)
         {
-            string patronName = SearchPatronName.Text.Trim();
+            string borrowerName = SearchPatronName.Text;
 
-            // Add validation and error handling if needed
-
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            if (string.IsNullOrWhiteSpace(borrowerName))
             {
-                string query = "SELECT * FROM borrowerinfo WHERE borrowerName LIKE @Name";
-                using (MySqlCommand command = new MySqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Name", "%" + patronName + "%");
+                SearchPatronResults.Text = "Please enter a search query.";
+                SearchPatronGridView.DataSource = null;
+                SearchPatronGridView.DataBind();
+                return;
+            }
 
-                    try
-                    {
-                        connection.Open();
+            string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM borrowerinfo WHERE borrowerName LIKE @BorrowerName";
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@BorrowerName", "%" + borrowerName + "%");
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
 
-                        using (MySqlDataReader reader = command.ExecuteReader())
-                        {
-                            if (reader.HasRows)
-                            {
-                                // Patrons found, display the search results                                
-                                SearchPatronGridView.DataSource = reader;
-                                SearchPatronGridView.DataBind();
+                SearchPatronGridView.DataSource = dt;
+                SearchPatronGridView.DataBind();
 
-                                // Hide the "No patrons found" message, if previously shown
-                                SearchPatronResults.Visible = false;
-
-                                // Get the count of borrowers found
-                                int borrowerCount = 0;
-                                while (reader.Read())
-                                {
-                                    borrowerCount++;
-                                }
-
-                                // Display the success message with the borrower count
-                                SearchPatronResults.Text = $"Found {borrowerCount} patron(s).";
-                                SearchPatronResults.Visible = true;
-                            }
-                            else
-                            {
-                                // No results found, display the message
-                                SearchPatronResults.Text = "No patrons found";
-                                SearchPatronResults.Visible = true;
-
-                                // Clear the GridView
-                                SearchPatronGridView.DataSource = null;
-                                SearchPatronGridView.DataBind();
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // Display an error message
-                        SearchPatronResults.Text = "Failed to search patron: " + ex.Message;
-                        SearchPatronResults.Visible = true;
-                    }
-                }
+                SearchPatronResults.Text = "Search Results: " + dt.Rows.Count + " books found.";
             }
         }
 

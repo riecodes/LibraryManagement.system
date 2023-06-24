@@ -11,36 +11,28 @@ namespace LibraryManagement.system
         {
             string borrowerId = BorrowerIdTextBox.Value;
             string bookId = BookIdTextBox.Value;
-            if (string.IsNullOrEmpty(borrowerId) && string.IsNullOrEmpty(bookId))
+
+            if (string.IsNullOrEmpty(borrowerId) || string.IsNullOrEmpty(bookId))
             {
                 ErrorMessageLabel.Text = "Please enter the Borrower ID and the Book ID";
                 SuccessMessageLabel.Text = "";
                 return;
             }
-            else if (string.IsNullOrEmpty(borrowerId))
-            {
-                ErrorMessageLabel.Text = "Please enter Borrower ID";
-                SuccessMessageLabel.Text = "";
-                return;
-            }            
-            else if (string.IsNullOrEmpty(bookId))
-            {
-                ErrorMessageLabel.Text = "Please enter Book ID";
-                SuccessMessageLabel.Text = "";
-                return;
-            }
+
             if (!ValidateBorrower(borrowerId))
             {
                 ErrorMessageLabel.Text = "Invalid Borrower ID";
                 SuccessMessageLabel.Text = "";
                 return;
             }
+
             if (!ValidateBookExistence(bookId))
             {
                 ErrorMessageLabel.Text = "Invalid Book ID";
                 SuccessMessageLabel.Text = "";
                 return;
             }
+
             // Validate book status
             if (!ValidateBookAvailability(bookId))
             {
@@ -48,6 +40,19 @@ namespace LibraryManagement.system
                 SuccessMessageLabel.Text = "";
                 return;
             }
+
+            // Update book status to "IN" in the database
+            UpdateBookStatus(bookId, "IN");
+
+            IncrementNumberOfBooksAllowed(borrowerId);
+
+            string transactionId = GenerateTransactionId("R-");
+            string transactionCatId = "RCAT002";
+            string transactionCatDetail = "RETURN";
+            DateTime transactionDate = DateTime.Now;
+
+            // Insert the transaction record into the database
+            InsertTransactionRecord(transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
 
             // Retrieve the borrow date and return date from the database
             DateTime borrowDate;
@@ -70,28 +75,13 @@ namespace LibraryManagement.system
             // Handle penalty for returning after 3 days
             if (daysLate > 3)
             {
-                // Handle penalty logic here
-                // For example, display penalty message or perform necessary actions
-                // You can use the daysLate value to determine the penalty amount or action
-                ErrorMessageLabel.Text = "Penalty incurred for returning after 3 days.";                
+                ErrorMessageLabel.Text = "Penalty incurred for returning after 3 days. Days Late: " + daysLate;
             }
 
-            // Update book status to "IN" in the database
-            UpdateBookStatus(bookId, "IN");
-
-            IncrementNumberOfBooksAllowed(borrowerId);
-
-            string transactionId = GenerateTransactionId("R-");
-            string transactionCatId = "RCAT002";
-            string transactionCatDetail = "RETURN";
-            DateTime transactionDate = DateTime.Now;
-
-            // Insert the transaction record into the database
-            InsertTransactionRecord(transactionId, transactionCatId, transactionCatDetail, borrowerId, bookId, transactionDate);
-
             // Display success message
-            SuccessMessageLabel.Text = "Book returned successfully.";
+            SuccessMessageLabel.Text = "/ Book returned successfully.";
         }
+
 
         private bool ValidateBorrower(string borrowerId)
         {
@@ -148,12 +138,6 @@ namespace LibraryManagement.system
         {
             string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementSystemConnectionString"].ConnectionString;
             string query = "UPDATE bookinfo SET status = @Status WHERE bookid = @BookId";
-
-            // Check if the status is changing from "OUT" to "IN"
-            if (status == "IN")
-            {
-                query += "; DELETE FROM transactioninfo WHERE bookid = @BookId";
-            }
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {

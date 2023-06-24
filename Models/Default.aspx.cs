@@ -61,26 +61,16 @@ namespace LibraryManagement.system.Models
                         // Check if the book category already has books and the copy number is sequential
                         if (categoryExistsCount > 0)
                         {
-                            string existingCopyNumQuery = "SELECT COUNT(*) FROM bookinfo WHERE bookcategory = @BookCategory AND copynum = @CopyNumber";
-                            MySqlCommand existingCopyNumCmd = new MySqlCommand(existingCopyNumQuery, con);
-                            existingCopyNumCmd.Parameters.AddWithValue("@BookCategory", bookCategory);
-                            existingCopyNumCmd.Parameters.AddWithValue("@CopyNumber", copyNumber);
-                            int existingCopyNumCount = Convert.ToInt32(existingCopyNumCmd.ExecuteScalar());
+                            // Get the maximum copy number in the book category
+                            string maxCopyNumQuery = "SELECT MAX(copynum) FROM bookinfo WHERE bookcategory = @BookCategory";
+                            MySqlCommand maxCopyNumCmd = new MySqlCommand(maxCopyNumQuery, con);
+                            maxCopyNumCmd.Parameters.AddWithValue("@BookCategory", bookCategory);
+                            int maxCopyNum = Convert.ToInt32(maxCopyNumCmd.ExecuteScalar());
 
-                            if (existingCopyNumCount > 0)
+                            // Check if the copy number is missing or already exists
+                            if (copyNumber < 1 || copyNumber > maxCopyNum + 1 || CopyNumberExists(con, bookCategory, copyNumber))
                             {
-                                lblAddBookError.Text = $"A book with Copy Number {copyNumber} already exists.";
-                                return;
-                            }
-
-                            string sequentialCopyNumQuery = "SELECT MAX(copynum) FROM bookinfo WHERE bookcategory = @BookCategory";
-                            MySqlCommand sequentialCopyNumCmd = new MySqlCommand(sequentialCopyNumQuery, con);
-                            sequentialCopyNumCmd.Parameters.AddWithValue("@BookCategory", bookCategory);
-                            int maxCopyNum = Convert.ToInt32(sequentialCopyNumCmd.ExecuteScalar());
-
-                            if (copyNumber != maxCopyNum + 1)
-                            {
-                                lblAddBookError.Text = $"A book with Copy Number {copyNumber - 1} is missing. Please ensure the copy numbers are sequential.";
+                                lblAddBookError.Text = $"Invalid copy number. Please ensure the copy numbers are sequential starting from 1 to {maxCopyNum + 1} and are not duplicates within the same book category.";
                                 return;
                             }
                         }
@@ -116,11 +106,12 @@ namespace LibraryManagement.system.Models
                         if (rowsAffected > 0)
                         {
                             lblAddBookError.Text = "Book added successfully.";
+                            
                             BindBookGrid();
+                            ClearInputFields();
                         }
                         else
                         {
-
                             lblAddBookError.Text = "An error occurred while adding the book.";
                         }
                     }
@@ -132,6 +123,7 @@ namespace LibraryManagement.system.Models
             }
         }
 
+
         public void ClearInputFields()
         {
             // Clear the input fields
@@ -139,16 +131,21 @@ namespace LibraryManagement.system.Models
             txtBookCategoryDetail.Value = string.Empty;
             txtBookTitle.Value = string.Empty;
             txtCopyNumber.Value = string.Empty;
-            txtNumberOfDaysAllowed.Value = string.Empty;
-            lblDeleteBookError.Text = string.Empty;
-            lblAddBookError.Text = string.Empty;
+            txtNumberOfDaysAllowed.Value = string.Empty;                        
             DeleteBookId.Text = string.Empty;
-
+            SearchBook.Text = string.Empty;
             // Set the default value for Number of Days Allowed
             txtNumberOfDaysAllowed.Value = "3";
+        }
 
-
-
+        private bool CopyNumberExists(MySqlConnection con, string bookCategory, int copyNumber)
+        {
+            string copyNumberExistsQuery = "SELECT COUNT(*) FROM bookinfo WHERE bookcategory = @BookCategory AND copynum = @CopyNumber";
+            MySqlCommand copyNumberExistsCmd = new MySqlCommand(copyNumberExistsQuery, con);
+            copyNumberExistsCmd.Parameters.AddWithValue("@BookCategory", bookCategory);
+            copyNumberExistsCmd.Parameters.AddWithValue("@CopyNumber", copyNumber);
+            int copyNumberExistsCount = Convert.ToInt32(copyNumberExistsCmd.ExecuteScalar());
+            return copyNumberExistsCount > 0;
         }
 
         private string GenerateBookId(string bookCategory, int copyNumber, MySqlConnection con)
@@ -336,6 +333,10 @@ namespace LibraryManagement.system.Models
 
                     if (transactionReader.HasRows)
                     {
+                        DeleteBookButton.Visible = false;
+                        ConfirmDeleteBookButton.Visible = true;
+                        CancelDeleteBookButton.Visible = true;
+
                         // Book has associated transactions, display confirmation message
                         string confirmationMessage = "This book has the following transaction(s):<br>";
 
@@ -349,12 +350,11 @@ namespace LibraryManagement.system.Models
                         confirmationMessage += "Are you sure you want to delete it?";
 
                         // Hide the delete button and display the confirmation message and cancel button
-                        DeleteBookButton.Visible = false;
-                        ConfirmDeleteBookButton.Visible = true;
+                        
                         ConfirmDeleteBookButton.Attributes["onclick"] = $"DeleteBook('{bookID}');";
-                        CancelDeleteBookButton.Visible = true; // Add this line to show the cancel button
+                        
 
-                        DeleteBookConfirmation.Text = confirmationMessage;
+                        DeleteBookConfirmation.Text = confirmationMessage;                        
                     }
                     else
                     {
@@ -371,7 +371,11 @@ namespace LibraryManagement.system.Models
             }
 
             BindBookGrid();
+
+            // Show the delete button
+            DeleteBookButton.Visible = true;
         }
+
 
         protected void CancelDeleteBookButton_Click(object sender, EventArgs e)
         {
@@ -422,6 +426,10 @@ namespace LibraryManagement.system.Models
             }
 
             DeleteBookConfirmation.Text = "Book deleted successfully.";
+            DeleteBookId.Text = string.Empty;
+            DeleteBookButton.Visible = true;
+            ConfirmDeleteBookButton.Visible = false;
+            CancelDeleteBookButton.Visible = false;           
             BindBookGrid();
         }
 
