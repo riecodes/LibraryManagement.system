@@ -112,16 +112,13 @@ namespace LibraryManagement.system.Models
 
         private string GenerateBorrowerId(string name, string course, string section)
         {
-            string initials = GetInitials(name);
             string date = GetDate();
-            string courseCode = GetCourseCode(course);
-            string sectionCode = GetSectionCode(section);
-
+            string borrowerCountString;
             int borrowerCount = GetBorrowerCountFromDatabase(); // Retrieve the borrower count from the database
 
             borrowerCount++; // Increment the borrower count
-
-            string borrowerId = initials + date + courseCode + sectionCode + borrowerCount.ToString();
+            borrowerCountString = "-00" + borrowerCount;
+            string borrowerId = date + borrowerCountString;
 
             return borrowerId;
         }
@@ -145,43 +142,6 @@ namespace LibraryManagement.system.Models
 
             return borrowerCount;
 
-        }
-
-
-
-        private string GetInitials(string name)
-        {
-            // Split the name into individual words
-            string[] words = name.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            // Get the first character of each word
-            string initials = "";
-            foreach (string word in words)
-            {
-                initials += char.ToUpper(word[0]);
-            }
-
-            return initials;
-        }
-
-        private string GetCourseCode(string course)
-        {
-            // Generate a course code based on the course name or abbreviation
-            // Implement your own logic here to generate the code
-            // For example, you can use a dictionary to map course names to codes
-
-            // Assuming the course name is abbreviated, you can simply return a shortened version
-            return course.Substring(0, Math.Min(course.Length, 3));
-        }
-
-        private string GetSectionCode(string section)
-        {
-            // Generate a section code based on the section name or abbreviation
-            // Implement your own logic here to generate the code
-            // For example, you can use a dictionary to map section names to codes
-
-            // Assuming the section name is abbreviated, you can simply return it
-            return section;
         }
 
         private string GetDate()

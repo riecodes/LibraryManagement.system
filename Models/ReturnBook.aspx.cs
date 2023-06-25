@@ -79,7 +79,7 @@ namespace LibraryManagement.system
             }
 
             // Display success message
-            SuccessMessageLabel.Text = "/ Book returned successfully.";
+            SuccessMessageLabel.Text = "Book returned successfully.";
         }
 
 
