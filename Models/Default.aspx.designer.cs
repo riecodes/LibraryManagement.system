@@ -177,6 +177,15 @@ namespace LibraryManagement.system.Models
         protected global::System.Web.UI.WebControls.Button ConfirmDeleteBookButton;
 
         /// <summary>
+        /// CancelDeleteBookButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button CancelDeleteBookButton;
+
+        /// <summary>
         /// DeleteBookConfirmation control.
         /// </summary>
         /// <remarks>

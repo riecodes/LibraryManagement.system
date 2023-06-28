@@ -55,6 +55,11 @@ namespace LibraryManagement.system
                         // Display overdue message
                         ErrorMessageLabel.Text = "Overdue return! The book is " + daysLate + " day(s) late.";
                     }
+                    else
+                    {
+                        // No penalty or overdue
+                        ErrorMessageLabel.Text = "";
+                    }
 
                     // Update book status to "IN" in the database
                     UpdateBookStatus(connection, bookId, "IN");
@@ -123,7 +128,7 @@ namespace LibraryManagement.system
 
         private int CalculateDaysLate(MySqlConnection connection, string borrowerId, int numberOfDaysAllowed)
         {
-            string query = "SELECT DATEDIFF(CURDATE(), transdate) FROM transactioninfo WHERE borrowerid = @BorrowerId AND transcatdetail = 'BORROW' ORDER BY transdate DESC LIMIT 1";
+            string query = "SELECT DATEDIFF(CURDATE(), transdate) FROM transactioninfo WHERE borrowerid = @BorrowerId AND transcatdetail = 'BORROW' AND bookid IN (SELECT bookid FROM bookinfo WHERE status = 'OUT') ORDER BY transdate DESC LIMIT 1";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@BorrowerId", borrowerId);
@@ -172,16 +177,6 @@ namespace LibraryManagement.system
                     string transactionId = prefix + DateTime.Now.ToString("yyyyMMdd") + "-" + (count + 1).ToString("D3");
                     return transactionId;
                 }
-            }
-        }
-
-        private string GetBookCategory(MySqlConnection connection, string bookId)
-        {
-            string query = "SELECT bookcategory FROM bookinfo WHERE bookid = @BookId";
-            using (MySqlCommand command = new MySqlCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@BookId", bookId);
-                return command.ExecuteScalar()?.ToString();
             }
         }
 

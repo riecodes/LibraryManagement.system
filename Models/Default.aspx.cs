@@ -348,10 +348,11 @@ namespace LibraryManagement.system.Models
 
                         confirmationMessage += "Are you sure you want to delete it?";
 
-                        // Hide the delete button and display the confirmation message
+                        // Hide the delete button and display the confirmation message and cancel button
                         DeleteBookButton.Visible = false;
                         ConfirmDeleteBookButton.Visible = true;
                         ConfirmDeleteBookButton.Attributes["onclick"] = $"DeleteBook('{bookID}');";
+                        CancelDeleteBookButton.Visible = true; // Add this line to show the cancel button
 
                         DeleteBookConfirmation.Text = confirmationMessage;
                     }
@@ -371,6 +372,16 @@ namespace LibraryManagement.system.Models
 
             BindBookGrid();
         }
+
+        protected void CancelDeleteBookButton_Click(object sender, EventArgs e)
+        {
+            // Reset the view when the delete operation is canceled
+            DeleteBookButton.Visible = true;
+            ConfirmDeleteBookButton.Visible = false;
+            CancelDeleteBookButton.Visible = false;
+            DeleteBookConfirmation.Text = "";
+        }
+
 
 
         protected void ConfirmDeleteBookButton_Click(object sender, EventArgs e)

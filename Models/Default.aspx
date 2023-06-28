@@ -157,6 +157,7 @@
                     <div>
                         <asp:Button CssClass="aspbutton" ID="DeleteBookButton" runat="server" Text="Delete Book" OnClick="DeleteBookButton_Click" />
                         <asp:Button CssClass="aspbutton" ID="ConfirmDeleteBookButton" runat="server" Text="Confirm Delete" OnClick="ConfirmDeleteBookButton_Click" Visible="false" />
+                        <asp:Button CssClass="aspbutton" ID="CancelDeleteBookButton" runat="server" Text="Cancel" OnClick="CancelDeleteBookButton_Click" Visible="false" />
                     </div>
                     <div>
                         <asp:Label CssClass="asplabel" ID="DeleteBookConfirmation" runat="server"></asp:Label>
